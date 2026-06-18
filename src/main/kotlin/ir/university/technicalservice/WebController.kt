@@ -30,14 +30,15 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
 
     @GetMapping("/")
     fun home(model: Model): String {
-        model.addAttribute("categoriesFa", repo.categoriesFa)
+        model.addAttribute("categories", repo.categories)
         model.addAttribute("featured", repo.featured())
+        model.addAttribute("stats", repo.stats())
         return "home"
     }
 
     @GetMapping("/technicians")
-    fun technicians(model: Model): String {
-        searchModel(model, SearchCriteria())
+    fun technicians(model: Model, criteria: SearchCriteria): String {
+        searchModel(model, criteria)
         return "technicians"
     }
 
@@ -57,30 +58,49 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
 
     @PostMapping("/technicians/{id}/book")
     fun book(@PathVariable id: Long, @RequestParam customerName: String, @RequestParam title: String, @RequestParam locationNote: String, @RequestParam slotId: String, model: Model): String {
-        val request = repo.book(id, slotId, customerName, title, locationNote)
-        model.addAttribute("request", request)
-        model.addAttribute("googleUrl", googleCalendarUrl(request))
-        return "fragments/booking-result :: bookingResult"
+        val tech = repo.findTechnician(id) ?: return "redirect:/technicians"
+        model.addAttribute("tech", tech)
+        runCatching {
+            repo.book(id, slotId, customerName, title, locationNote)
+        }.onSuccess { request ->
+            model.addAttribute("request", request)
+            model.addAttribute("googleUrl", googleCalendarUrl(request))
+        }.onFailure { error ->
+            model.addAttribute("bookingError", error.message ?: "Booking failed")
+        }
+        return "fragments/booking-panel :: bookingPanel"
     }
 
     @PostMapping("/technicians/{id}/reviews")
-    fun review(@PathVariable id: Long, @RequestParam author: String, @RequestParam stars: Int, @RequestParam comment: String, model: Model): String {
-        val tech = repo.addReview(id, author, stars, comment)
+    fun review(@PathVariable id: Long, @RequestParam author: String, @RequestParam stars: String, @RequestParam comment: String, model: Model): String {
+        val tech = repo.findTechnician(id) ?: return "redirect:/technicians"
+        val rating = stars.toIntOrNull()
+        if (rating == null) {
+            model.addAttribute("reviewError", "Rating must be a number from 1 to 5")
+        } else {
+            runCatching {
+                repo.addReview(id, author, rating, comment)
+            }.onSuccess {
+                model.addAttribute("reviewSaved", true)
+            }.onFailure { error ->
+                model.addAttribute("reviewError", error.message ?: "Review failed")
+            }
+        }
         model.addAttribute("tech", tech)
-        model.addAttribute("ratingStars", stars(tech.ratingAverage))
+        model.addAttribute("ratingStars", ir.university.technicalservice.stars(tech.ratingAverage))
         return "fragments/reviews :: reviews"
     }
 
     @GetMapping("/technician/dashboard")
     fun dashboard(model: Model): String {
-        model.addAttribute("requests", repo.allRequests())
+        addRequestsModel(model)
         return "dashboard"
     }
 
     @PostMapping("/requests/{id}/status")
     fun status(@PathVariable id: String, @RequestParam status: RequestStatus, model: Model): String {
         repo.updateRequestStatus(id, status)
-        model.addAttribute("requests", repo.allRequests())
+        addRequestsModel(model)
         return "fragments/request-table :: requestTable"
     }
 
@@ -95,7 +115,15 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
     private fun searchModel(model: Model, criteria: SearchCriteria) {
         model.addAttribute("criteria", criteria)
         model.addAttribute("technicians", repo.search(criteria))
-        model.addAttribute("categoriesFa", repo.categoriesFa)
+        model.addAttribute("categories", repo.categories)
         model.addAttribute("citiesFa", repo.technicians.map { it.cityFa }.distinct())
+    }
+
+    private fun addRequestsModel(model: Model) {
+        val requests = repo.allRequests()
+        model.addAttribute("requests", requests)
+        model.addAttribute("submittedCount", requests.count { it.status == RequestStatus.SUBMITTED })
+        model.addAttribute("acceptedCount", requests.count { it.status == RequestStatus.ACCEPTED })
+        model.addAttribute("rejectedCount", requests.count { it.status == RequestStatus.REJECTED })
     }
 }

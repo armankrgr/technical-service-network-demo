@@ -16,6 +16,14 @@ fun stars(rating: Double): String {
     return "★".repeat(full) + "☆".repeat(5 - full)
 }
 
+fun statusLabel(status: RequestStatus, lang: String): String = when (status) {
+    RequestStatus.SUBMITTED -> if (lang == "en") "Pending" else "در انتظار بررسی"
+    RequestStatus.ACCEPTED -> if (lang == "en") "Accepted" else "قبول شده"
+    RequestStatus.REJECTED -> if (lang == "en") "Rejected" else "رد شده"
+}
+
+fun statusCss(status: RequestStatus): String = status.name.lowercase()
+
 fun googleCalendarUrl(request: ServiceRequest): String {
     val zone = ZoneId.of("Asia/Tehran")
     val start = request.slotStart.atZone(zone).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(icsDate) + "Z"

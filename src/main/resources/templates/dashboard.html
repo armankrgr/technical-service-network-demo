@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${ui.t(lang,'dashboard')}">داشبورد</title>
-    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <script th:src="@{/js/htmx.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
     <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
@@ -12,8 +13,13 @@
 <main>
     <section class="page-head">
         <h1 th:text="${ui.t(lang,'dashboard')}">داشبورد متخصص</h1>
-        <p th:if="${lang == 'fa'}">درخواست های ثبت شده را با HTMX قبول یا رد کنید.</p>
-        <p th:if="${lang == 'en'}">Accept or reject submitted requests with HTMX.</p>
+        <p th:if="${lang == 'fa'}">متخصص می تواند وضعیت درخواست های ثبت شده را سریع بررسی کند.</p>
+        <p th:if="${lang == 'en'}">Specialists can quickly review submitted service requests.</p>
+    </section>
+    <section class="stats-grid compact-stats">
+        <div class="stat-card"><b th:text="${submittedCount}">0</b><span th:text="${lang == 'fa' ? 'در انتظار' : 'pending'}">در انتظار</span></div>
+        <div class="stat-card"><b th:text="${acceptedCount}">0</b><span th:text="${lang == 'fa' ? 'قبول شده' : 'accepted'}">قبول شده</span></div>
+        <div class="stat-card"><b th:text="${rejectedCount}">0</b><span th:text="${lang == 'fa' ? 'رد شده' : 'rejected'}">رد شده</span></div>
     </section>
     <div id="request-table" th:replace="~{fragments/request-table :: requestTable}"></div>
 </main>

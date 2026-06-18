@@ -1,7 +1,11 @@
-<div xmlns:th="http://www.thymeleaf.org" th:fragment="results">
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="results" id="results">
     <div class="result-count">
         <span th:text="${technicians.size()}">0</span>
         <span th:text="${lang == 'fa' ? 'متخصص پیدا شد' : 'technicians found'}">متخصص</span>
+    </div>
+    <div class="empty-state" th:if="${technicians.isEmpty()}">
+        <h3 th:text="${lang == 'fa' ? 'نتیجه ای پیدا نشد' : 'No matching specialists'}">نتیجه ای پیدا نشد</h3>
+        <p th:text="${lang == 'fa' ? 'فیلترها را کمی بازتر کنید یا شهر دیگری را امتحان کنید.' : 'Try broader filters or another city.'}">فیلترها را تغییر دهید.</p>
     </div>
     <div class="tech-grid">
         <article class="tech-card" th:each="tech : ${technicians}">
@@ -16,8 +20,12 @@
                 <span th:text="${T(ir.university.technicalservice.FormattersKt).stars(tech.ratingAverage)}">★★★★★</span>
                 <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b>
             </div>
-            <p class="muted"><span th:text="${tech.completedJobs}">10</span> <span th:text="${lang == 'fa' ? 'کار انجام شده' : 'completed jobs'}">کار</span> • <span th:text="${tech.distanceKm}">3</span> km • <span th:text="${tech.approximateFee}">fee</span></p>
+            <p class="muted"><span th:text="${tech.completedJobs}">10</span> <span th:text="${lang == 'fa' ? 'کار انجام شده' : 'completed jobs'}">کار</span> • <span th:text="${tech.distanceKm}">3</span> km • <span th:text="${tech.approximateFee(lang)}">fee</span></p>
             <div class="tags"><span th:each="skill : ${tech.skills(lang)}" th:text="${skill}">skill</span></div>
+            <div class="card-meta">
+                <span><b th:text="${tech.availableSlotCount}">4</b> <span th:text="${lang == 'fa' ? 'زمان آزاد' : 'open slots'}">زمان آزاد</span></span>
+                <span th:text="${tech.verified ? (lang == 'fa' ? 'مدارک بررسی شده' : 'documents checked') : (lang == 'fa' ? 'در انتظار تایید' : 'pending verification')}">وضعیت</span>
+            </div>
             <a class="btn small" th:href="@{/technicians/{id}(id=${tech.id})}" th:text="${lang == 'fa' ? 'مشاهده پروفایل' : 'View profile'}">پروفایل</a>
         </article>
     </div>

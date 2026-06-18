@@ -1,4 +1,4 @@
-<div xmlns:th="http://www.thymeleaf.org" th:fragment="requestTable" class="table-wrap">
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="requestTable" id="request-table" class="table-wrap">
     <table>
         <thead>
         <tr>
@@ -12,7 +12,7 @@
             <td th:text="${req.customerName}">customer</td>
             <td th:text="${req.title}">title</td>
             <td th:text="${T(ir.university.technicalservice.FormattersKt).ui(req.slotStart)}">time</td>
-            <td><span class="badge" th:text="${req.status}">status</span></td>
+            <td><span th:class="${'status-chip ' + T(ir.university.technicalservice.FormattersKt).statusCss(req.status)}" th:text="${T(ir.university.technicalservice.FormattersKt).statusLabel(req.status, lang)}">status</span></td>
             <td class="actions">
                 <form th:hx-post="@{/requests/{id}/status(id=${req.id})}" hx-target="#request-table" hx-swap="outerHTML">
                     <input type="hidden" name="status" value="ACCEPTED">

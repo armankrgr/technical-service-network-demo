@@ -1,6 +1,13 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="reviews" id="reviews">
-    <h2 th:text="${ui.t(lang,'reviews')}">نظرها</h2>
+    <div class="panel-head">
+        <div>
+            <h2 th:text="${ui.t(lang,'reviews')}">نظرها</h2>
+            <p th:text="${lang == 'fa' ? 'بازخورد مشتریان بعد از انجام خدمت' : 'Customer feedback after completed work'}">بازخورد</p>
+        </div>
+    </div>
     <div class="rating big"><span th:text="${ratingStars}">★★★★★</span> <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b></div>
+    <div class="alert success" th:if="${reviewSaved}" th:text="${lang == 'fa' ? 'نظر شما ثبت شد و امتیاز به روز شد.' : 'Your review was saved and the rating was updated.'}">ثبت شد</div>
+    <div class="alert error" th:if="${reviewError != null}" th:text="${reviewError}">error</div>
     <form class="stack compact" th:hx-post="@{/technicians/{id}/reviews(id=${tech.id})}" hx-target="#reviews" hx-swap="outerHTML">
         <input name="author" required th:placeholder="${lang == 'fa' ? 'نام شما' : 'Your name'}">
         <select name="stars" required>
@@ -9,9 +16,12 @@
         <textarea name="comment" required th:placeholder="${lang == 'fa' ? 'نظر شما' : 'Your comment'}"></textarea>
         <button class="btn primary" type="submit" th:text="${lang == 'fa' ? 'ثبت نظر' : 'Submit review'}">ثبت نظر</button>
     </form>
+    <div class="empty-state small" th:if="${tech.reviews.isEmpty()}" th:text="${lang == 'fa' ? 'هنوز نظری ثبت نشده است.' : 'No reviews yet.'}">empty</div>
     <article class="review" th:each="review : ${tech.reviews}">
-        <strong th:text="${review.author}">author</strong>
-        <span class="rating" th:text="${T(ir.university.technicalservice.FormattersKt).stars(review.stars)}">★★★★★</span>
+        <div class="review-top">
+            <strong th:text="${review.author}">author</strong>
+            <span class="rating" th:text="${T(ir.university.technicalservice.FormattersKt).stars(review.stars)}">★★★★★</span>
+        </div>
         <p th:text="${review.comment}">comment</p>
     </article>
 </div>
