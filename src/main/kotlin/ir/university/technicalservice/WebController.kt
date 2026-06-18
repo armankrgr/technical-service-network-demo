@@ -31,6 +31,7 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
     @GetMapping("/")
     fun home(model: Model): String {
         model.addAttribute("categories", repo.categories)
+        model.addAttribute("categoryCounts", repo.categoryCounts())
         model.addAttribute("featured", repo.featured())
         model.addAttribute("stats", repo.stats())
         return "home"
@@ -52,6 +53,7 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
     fun profile(@PathVariable id: Long, model: Model): String {
         val tech = repo.findTechnician(id) ?: return "redirect:/technicians"
         model.addAttribute("tech", tech)
+        model.addAttribute("similarTechnicians", repo.similarTechnicians(tech))
         model.addAttribute("ratingStars", stars(tech.ratingAverage))
         return "profile"
     }
@@ -75,8 +77,8 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
     fun review(@PathVariable id: Long, @RequestParam author: String, @RequestParam stars: String, @RequestParam comment: String, model: Model): String {
         val tech = repo.findTechnician(id) ?: return "redirect:/technicians"
         val rating = stars.toIntOrNull()
-        if (rating == null) {
-            model.addAttribute("reviewError", "Rating must be a number from 1 to 5")
+        if (rating == null || rating !in 1..5) {
+            model.addAttribute("reviewError", if ((model.asMap()["lang"] as? String) == "en") "Choose a rating from 1 to 5." else "لطفا یک امتیاز معتبر بین ۱ تا ۵ انتخاب کنید.")
         } else {
             runCatching {
                 repo.addReview(id, author, rating, comment)
@@ -113,17 +115,22 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
     }
 
     private fun searchModel(model: Model, criteria: SearchCriteria) {
+        val results = repo.search(criteria)
         model.addAttribute("criteria", criteria)
-        model.addAttribute("technicians", repo.search(criteria))
+        model.addAttribute("technicians", results)
         model.addAttribute("categories", repo.categories)
-        model.addAttribute("citiesFa", repo.technicians.map { it.cityFa }.distinct())
+        model.addAttribute("categoryCounts", repo.categoryCounts())
+        model.addAttribute("citiesFa", repo.citiesFa())
+        model.addAttribute("totalTechnicians", repo.technicians.size)
     }
 
     private fun addRequestsModel(model: Model) {
         val requests = repo.allRequests()
         model.addAttribute("requests", requests)
+        model.addAttribute("totalRequests", requests.size)
         model.addAttribute("submittedCount", requests.count { it.status == RequestStatus.SUBMITTED })
         model.addAttribute("acceptedCount", requests.count { it.status == RequestStatus.ACCEPTED })
         model.addAttribute("rejectedCount", requests.count { it.status == RequestStatus.REJECTED })
+        model.addAttribute("todayCount", requests.count { it.slotStart.toLocalDate() == java.time.LocalDate.now() })
     }
 }

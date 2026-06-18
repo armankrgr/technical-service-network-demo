@@ -11,30 +11,74 @@
 <body>
 <div th:replace="~{fragments/layout :: nav}"></div>
 <main>
-    <section class="page-head">
-        <h1 th:text="${ui.t(lang,'search')}">جستجو و فیلتر زنده</h1>
-        <p th:if="${lang == 'fa'}">متخصص مناسب را بر اساس شهر، دسته خدمت، مهارت، امتیاز و زمان آزاد پیدا کنید.</p>
-        <p th:if="${lang == 'en'}">Find the right specialist by city, category, skill, rating, and availability.</p>
+    <section class="page-head search-head">
+        <div>
+            <p class="eyebrow" th:text="${lang == 'fa' ? 'جستجوی زنده خدمات فنی' : 'Live specialist search'}">جستجوی زنده</p>
+            <h1 th:text="${ui.t(lang,'search')}">جستجو و فیلتر زنده</h1>
+            <p th:if="${lang == 'fa'}">متخصص مناسب را بر اساس شهر، دسته خدمت، مهارت، امتیاز، زمان آزاد و ترتیب نمایش پیدا کنید.</p>
+            <p th:if="${lang == 'en'}">Find the right specialist by city, category, skill, rating, open slots, and sort order.</p>
+        </div>
+        <div class="search-summary">
+            <b th:text="${totalTechnicians}">24</b>
+            <span th:text="${lang == 'fa' ? 'متخصص نمونه در شبکه' : 'demo specialists in the network'}">متخصص نمونه</span>
+        </div>
     </section>
 
-    <form class="filters" hx-get="/technicians/results" hx-target="#results" hx-trigger="input delay:350ms, change">
-        <input name="q" th:value="${criteria.q}" th:placeholder="${lang == 'fa' ? 'نام، مهارت یا عنوان خدمت' : 'Name, skill, or service'}">
-        <select name="category">
-            <option value="" th:text="${lang == 'fa' ? 'همه دسته ها' : 'All categories'}">همه</option>
-            <option th:each="cat : ${categories}" th:value="${cat.fa}" th:text="${cat.label(lang)}" th:selected="${criteria.category == cat.fa || criteria.category == cat.en}">cat</option>
-        </select>
-        <select name="city">
-            <option value="" th:text="${lang == 'fa' ? 'همه شهرها' : 'All cities'}">همه</option>
-            <option th:each="city : ${citiesFa}" th:value="${city}" th:text="${city}" th:selected="${criteria.city == city}">city</option>
-        </select>
-        <select name="minRating">
-            <option value="" th:text="${lang == 'fa' ? 'حداقل امتیاز' : 'Minimum rating'}">rating</option>
-            <option value="3">3+</option>
-            <option value="4">4+</option>
-            <option value="4.5">4.5+</option>
-        </select>
-        <label class="check"><input type="checkbox" name="availableOnly" value="true" th:checked="${criteria.availableOnly}"> <span th:text="${ui.t(lang,'available')}">فقط زمان دار</span></label>
-    </form>
+    <section class="filter-shell">
+        <form id="search-form" class="filters" hx-get="/technicians/results" hx-target="#results" hx-swap="outerHTML" hx-trigger="input delay:350ms, change" hx-indicator="#search-loading">
+            <label class="field wide">
+                <span th:text="${lang == 'fa' ? 'جستجو' : 'Search'}">جستجو</span>
+                <input name="q" th:value="${criteria.q}" th:placeholder="${lang == 'fa' ? 'نام، مهارت، شهر یا عنوان خدمت' : 'Name, skill, city, or service'}">
+            </label>
+            <label class="field">
+                <span th:text="${lang == 'fa' ? 'دسته' : 'Category'}">دسته</span>
+                <select name="category">
+                    <option value="" th:text="${lang == 'fa' ? 'همه دسته ها' : 'All categories'}">همه</option>
+                    <option th:each="cat : ${categories}" th:value="${cat.key}" th:text="${cat.label(lang)}" th:selected="${criteria.category == cat.key || criteria.category == cat.fa || criteria.category == cat.en}">cat</option>
+                </select>
+            </label>
+            <label class="field">
+                <span th:text="${lang == 'fa' ? 'شهر' : 'City'}">شهر</span>
+                <select name="city">
+                    <option value="" th:text="${lang == 'fa' ? 'همه شهرها' : 'All cities'}">همه</option>
+                    <option th:each="city : ${citiesFa}" th:value="${city}" th:text="${city}" th:selected="${criteria.city == city}">city</option>
+                </select>
+            </label>
+            <label class="field">
+                <span th:text="${lang == 'fa' ? 'امتیاز' : 'Rating'}">امتیاز</span>
+                <select name="minRating">
+                    <option value="" th:text="${lang == 'fa' ? 'همه امتیازها' : 'Any rating'}">rating</option>
+                    <option value="3" th:selected="${criteria.minRating == 3.0}">3+</option>
+                    <option value="4" th:selected="${criteria.minRating == 4.0}">4+</option>
+                    <option value="4.5" th:selected="${criteria.minRating == 4.5}">4.5+</option>
+                </select>
+            </label>
+            <label class="field">
+                <span th:text="${lang == 'fa' ? 'ترتیب' : 'Sort'}">ترتیب</span>
+                <select name="sort">
+                    <option value="rating" th:selected="${criteria.sort == null || criteria.sort == 'rating'}" th:text="${lang == 'fa' ? 'بالاترین امتیاز' : 'Highest rating'}">rating</option>
+                    <option value="distance" th:selected="${criteria.sort == 'distance'}" th:text="${lang == 'fa' ? 'نزدیک ترین' : 'Nearest'}">distance</option>
+                    <option value="price" th:selected="${criteria.sort == 'price'}" th:text="${lang == 'fa' ? 'کمترین هزینه شروع' : 'Lowest starting price'}">price</option>
+                    <option value="jobs" th:selected="${criteria.sort == 'jobs'}" th:text="${lang == 'fa' ? 'بیشترین تجربه' : 'Most experience'}">jobs</option>
+                </select>
+            </label>
+            <label class="check filter-check">
+                <input type="checkbox" name="availableOnly" value="true" th:checked="${criteria.availableOnly}">
+                <span th:text="${ui.t(lang,'available')}">فقط زمان دار</span>
+            </label>
+            <a class="btn ghost reset-link" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'حذف فیلترها' : 'Reset'}">حذف فیلترها</a>
+        </form>
+        <div class="filter-chips">
+            <a class="filter-chip" th:href="@{/technicians}" th:classappend="${criteria.category == null || criteria.category == ''} ? ' active' : ''" th:text="${lang == 'fa' ? 'همه خدمات' : 'All services'}">همه خدمات</a>
+            <a class="filter-chip" th:each="cat : ${categories}" th:href="@{/technicians(category=${cat.key})}" th:classappend="${criteria.category == cat.key || criteria.category == cat.fa || criteria.category == cat.en} ? ' active' : ''">
+                <span th:text="${cat.icon}">•</span>
+                <span th:text="${cat.label(lang)}">cat</span>
+                <small th:text="${categoryCounts[cat.fa]}">2</small>
+            </a>
+        </div>
+        <div id="search-loading" class="loading-indicator" role="status" aria-live="polite" th:text="${lang == 'fa' ? 'در حال به روزرسانی نتایج...' : 'Updating results...'}">loading</div>
+    </section>
+
     <div id="results" th:replace="~{fragments/technician-results :: results}"></div>
 </main>
 </body>

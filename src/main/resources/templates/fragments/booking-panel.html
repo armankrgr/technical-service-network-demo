@@ -1,4 +1,4 @@
-<div xmlns:th="http://www.thymeleaf.org" th:fragment="bookingPanel" id="booking-panel" class="panel">
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="bookingPanel" id="booking-panel" class="panel booking-panel">
     <div class="panel-head">
         <div>
             <h2 th:text="${ui.t(lang,'book')}">ثبت درخواست</h2>
@@ -7,13 +7,19 @@
         <span class="badge"><span th:text="${tech.availableSlotCount}">4</span> <span th:text="${lang == 'fa' ? 'زمان آزاد' : 'open'}">زمان آزاد</span></span>
     </div>
 
-    <div class="alert success" th:if="${request != null}">
-        <h3 th:text="${lang == 'fa' ? 'درخواست با موفقیت ثبت شد' : 'Request submitted successfully'}">درخواست ثبت شد</h3>
-        <p><b>ID:</b> <span th:text="${request.id}">REQ</span></p>
-        <p><b th:text="${lang == 'fa' ? 'زمان:' : 'Time:'}">زمان:</b> <span th:text="${T(ir.university.technicalservice.FormattersKt).ui(request.slotStart)}">time</span></p>
-        <div class="calendar-actions">
-            <a class="btn small" th:href="@{/calendar/{id}.ics(id=${request.id})}" th:text="${lang == 'fa' ? 'دانلود فایل تقویم' : 'Download .ics'}">ics</a>
-            <a class="btn small ghost" th:href="${googleUrl}" target="_blank" rel="noopener" th:text="${lang == 'fa' ? 'افزودن به Google Calendar' : 'Add to Google Calendar'}">google</a>
+    <div class="success-card" th:if="${request != null}" data-toast th:attr="data-toast-message=${lang == 'fa' ? 'درخواست شما ثبت شد' : 'Request submitted'}">
+        <div class="success-icon">✓</div>
+        <div>
+            <h3 th:text="${lang == 'fa' ? 'درخواست با موفقیت ثبت شد' : 'Request submitted successfully'}">درخواست ثبت شد</h3>
+            <p><span th:text="${lang == 'fa' ? 'کد درخواست:' : 'Request code:'}">کد درخواست:</span> <b th:text="${request.id}">REQ</b></p>
+            <p><span th:text="${lang == 'fa' ? 'متخصص:' : 'Specialist:'}">متخصص:</span> <b th:text="${tech.displayName(lang)}">نام</b></p>
+            <p><span th:text="${lang == 'fa' ? 'زمان:' : 'Time:'}">زمان:</span> <b th:text="${T(ir.university.technicalservice.FormattersKt).ui(request.slotStart)}">time</b></p>
+            <p><span th:text="${lang == 'fa' ? 'وضعیت:' : 'Status:'}">وضعیت:</span> <b th:text="${T(ir.university.technicalservice.FormattersKt).statusLabel(request.status, lang)}">status</b></p>
+            <div class="calendar-actions">
+                <a class="btn small" th:href="@{/calendar/{id}.ics(id=${request.id})}" th:text="${lang == 'fa' ? 'دانلود فایل تقویم' : 'Download .ics'}">ics</a>
+                <a class="btn small ghost" th:href="${googleUrl}" target="_blank" rel="noopener" th:text="${lang == 'fa' ? 'افزودن به Google Calendar' : 'Add to Google Calendar'}">google</a>
+                <a class="btn small ghost" th:href="@{/technician/dashboard}" th:text="${lang == 'fa' ? 'رفتن به داشبورد' : 'Open dashboard'}">dashboard</a>
+            </div>
         </div>
     </div>
 
@@ -22,14 +28,26 @@
         <p th:text="${bookingError}">error</p>
     </div>
 
-    <form class="stack" th:hx-post="@{/technicians/{id}/book(id=${tech.id})}" hx-target="#booking-panel" hx-swap="outerHTML">
+    <form class="stack booking-form" th:hx-post="@{/technicians/{id}/book(id=${tech.id})}" hx-target="#booking-panel" hx-swap="outerHTML">
         <input name="customerName" required th:placeholder="${lang == 'fa' ? 'نام مشتری' : 'Customer name'}">
         <input name="title" required th:placeholder="${lang == 'fa' ? 'عنوان درخواست' : 'Request title'}">
         <textarea name="locationNote" required th:placeholder="${lang == 'fa' ? 'آدرس یا توضیح مکان' : 'Address or location note'}"></textarea>
-        <select name="slotId" required th:disabled="${tech.availableSlotCount == 0}">
-            <option value="" th:text="${lang == 'fa' ? 'انتخاب زمان' : 'Select time'}">slot</option>
-            <option th:each="slot : ${tech.slots}" th:if="${!slot.booked}" th:value="${slot.id}" th:text="${T(ir.university.technicalservice.FormattersKt).ui(slot.start)}">time</option>
-        </select>
-        <button class="btn primary" type="submit" th:disabled="${tech.availableSlotCount == 0}" th:text="${tech.availableSlotCount == 0 ? (lang == 'fa' ? 'زمان آزادی باقی نمانده' : 'No open slots') : ui.t(lang,'book')}">ثبت</button>
+
+        <div class="slot-section">
+            <div class="slot-section-head">
+                <strong th:text="${lang == 'fa' ? 'زمان های پیشنهادی' : 'Suggested slots'}">زمان های پیشنهادی</strong>
+                <small th:text="${lang == 'fa' ? 'زمان های رزرو شده برای نمایش سناریوی خطا غیرفعال هستند.' : 'Booked slots are disabled to show the unavailable flow.'}">راهنما</small>
+            </div>
+            <div class="slot-grid">
+                <label class="slot-card" th:each="slot : ${tech.slots}" th:classappend="${slot.booked} ? ' unavailable' : ''">
+                    <input type="radio" name="slotId" th:value="${slot.id}" th:disabled="${slot.booked}" required>
+                    <span class="slot-time" th:text="${T(ir.university.technicalservice.FormattersKt).ui(slot.start)}">time</span>
+                    <small th:text="${slot.booked ? (lang == 'fa' ? 'رزرو شده' : 'booked') : (lang == 'fa' ? 'آماده رزرو' : 'available')}">available</small>
+                </label>
+            </div>
+            <div class="empty-state small" th:if="${tech.availableSlotCount == 0}" th:text="${lang == 'fa' ? 'فعلا زمان آزادی برای این متخصص باقی نمانده است.' : 'No open slots remain for this specialist.'}">empty</div>
+        </div>
+
+        <button class="btn primary full-btn" type="submit" th:disabled="${tech.availableSlotCount == 0}" th:text="${tech.availableSlotCount == 0 ? (lang == 'fa' ? 'زمان آزادی باقی نمانده' : 'No open slots') : ui.t(lang,'book')}">ثبت</button>
     </form>
 </div>

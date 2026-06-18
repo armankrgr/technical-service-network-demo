@@ -1,32 +1,58 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="results" id="results">
-    <div class="result-count">
-        <span th:text="${technicians.size()}">0</span>
-        <span th:text="${lang == 'fa' ? 'متخصص پیدا شد' : 'technicians found'}">متخصص</span>
+    <div class="result-bar">
+        <div>
+            <b th:text="${technicians.size()}">0</b>
+            <span th:text="${lang == 'fa' ? 'متخصص مطابق فیلترها' : 'matching specialists'}">متخصص</span>
+            <small th:if="${totalTechnicians != null}">/ <span th:text="${totalTechnicians}">24</span></small>
+        </div>
+        <span class="muted" th:text="${lang == 'fa' ? 'نتایج با تغییر فیلترها به صورت زنده به روز می شوند.' : 'Results refresh live as filters change.'}">live</span>
     </div>
-    <div class="empty-state" th:if="${technicians.isEmpty()}">
+
+    <div class="empty-state search-empty" th:if="${technicians.isEmpty()}">
         <h3 th:text="${lang == 'fa' ? 'نتیجه ای پیدا نشد' : 'No matching specialists'}">نتیجه ای پیدا نشد</h3>
-        <p th:text="${lang == 'fa' ? 'فیلترها را کمی بازتر کنید یا شهر دیگری را امتحان کنید.' : 'Try broader filters or another city.'}">فیلترها را تغییر دهید.</p>
+        <p th:text="${lang == 'fa' ? 'فیلترها را کمی بازتر کنید، شهر دیگری را امتحان کنید یا همه خدمات را ببینید.' : 'Try broader filters, another city, or view all services.'}">فیلترها را تغییر دهید.</p>
+        <a class="btn small" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'بازنشانی فیلترها' : 'Reset filters'}">بازنشانی</a>
     </div>
-    <div class="tech-grid">
-        <article class="tech-card" th:each="tech : ${technicians}">
+
+    <div class="tech-grid search-grid">
+        <article class="tech-card result-card" th:each="tech : ${technicians}">
             <div class="card-top">
-                <div>
-                    <h3 th:text="${tech.displayName(lang)}">نام</h3>
-                    <p th:text="${tech.category(lang)} + ' • ' + ${tech.city(lang)}">دسته</p>
+                <div class="identity">
+                    <div class="avatar small-avatar" th:text="${tech.avatarText(lang)}">ر</div>
+                    <div>
+                        <h3 th:text="${tech.displayName(lang)}">نام</h3>
+                        <p th:text="${tech.title(lang)}">عنوان</p>
+                    </div>
                 </div>
-                <span class="badge" th:if="${tech.verified}" th:text="${ui.t(lang,'verified')}">تایید شده</span>
+                <span class="badge" th:classappend="${tech.verified} ? '' : ' muted-badge'" th:text="${tech.verified ? ui.t(lang,'verified') : (lang == 'fa' ? 'در انتظار تایید' : 'pending')}">تایید شده</span>
             </div>
-            <div class="rating">
-                <span th:text="${T(ir.university.technicalservice.FormattersKt).stars(tech.ratingAverage)}">★★★★★</span>
+
+            <div class="card-location">
+                <span th:text="${tech.city(lang)}">تهران</span>
+                <span><b th:text="${#numbers.formatDecimal(tech.distanceKm,1,1)}">3.2</b> km</span>
+                <span th:text="${tech.category(lang)}">برق کاری</span>
+            </div>
+
+            <div class="rating-row">
+                <span class="rating" th:text="${T(ir.university.technicalservice.FormattersKt).stars(tech.ratingAverage)}">★★★★★</span>
                 <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b>
+                <small><span th:text="${tech.reviewCount}">3</span> <span th:text="${lang == 'fa' ? 'نظر' : 'reviews'}">نظر</span></small>
             </div>
-            <p class="muted"><span th:text="${tech.completedJobs}">10</span> <span th:text="${lang == 'fa' ? 'کار انجام شده' : 'completed jobs'}">کار</span> • <span th:text="${tech.distanceKm}">3</span> km • <span th:text="${tech.approximateFee(lang)}">fee</span></p>
-            <div class="tags"><span th:each="skill : ${tech.skills(lang)}" th:text="${skill}">skill</span></div>
-            <div class="card-meta">
-                <span><b th:text="${tech.availableSlotCount}">4</b> <span th:text="${lang == 'fa' ? 'زمان آزاد' : 'open slots'}">زمان آزاد</span></span>
-                <span th:text="${tech.verified ? (lang == 'fa' ? 'مدارک بررسی شده' : 'documents checked') : (lang == 'fa' ? 'در انتظار تایید' : 'pending verification')}">وضعیت</span>
+
+            <p class="muted clamp" th:text="${tech.bio(lang)}">bio</p>
+
+            <div class="tags">
+                <span th:each="skill, iter : ${tech.skills(lang)}" th:if="${iter.index < 4}" th:text="${skill}">skill</span>
             </div>
-            <a class="btn small" th:href="@{/technicians/{id}(id=${tech.id})}" th:text="${lang == 'fa' ? 'مشاهده پروفایل' : 'View profile'}">پروفایل</a>
+
+            <div class="card-metrics">
+                <span><small th:text="${lang == 'fa' ? 'کار انجام شده' : 'jobs'}">کار</small><b th:text="${tech.completedJobs}">132</b></span>
+                <span><small th:text="${lang == 'fa' ? 'پاسخگویی' : 'response'}">پاسخگویی</small><b th:text="${tech.responseTime(lang)}">امروز</b></span>
+                <span><small th:text="${lang == 'fa' ? 'هزینه شروع' : 'starts at'}">هزینه</small><b th:text="${tech.approximateFee(lang)}">fee</b></span>
+                <span><small th:text="${lang == 'fa' ? 'زمان آزاد' : 'open slots'}">زمان آزاد</small><b th:text="${tech.availableSlotCount}">4</b></span>
+            </div>
+
+            <a class="btn small book-link" th:href="@{/technicians/{id}(id=${tech.id})}" th:text="${lang == 'fa' ? 'مشاهده و رزرو' : 'View and book'}">مشاهده و رزرو</a>
         </article>
     </div>
 </div>

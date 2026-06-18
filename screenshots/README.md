@@ -9,3 +9,4 @@ Recommended captures:
 - `profile.png`
 - `booking-success.png`
 - `dashboard.png`
+- `admin-owner.png`

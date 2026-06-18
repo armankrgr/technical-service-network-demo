@@ -6,6 +6,15 @@ import kotlin.test.assertTrue
 
 class DemoDataRepoTests {
     @Test
+    fun `demo catalog has presentation scale`() {
+        val repo = DemoDataRepo()
+
+        assertTrue(repo.categories.size >= 14)
+        assertTrue(repo.technicians.size >= 24)
+        assertEquals(24, repo.stats().technicianCount)
+    }
+
+    @Test
     fun `search filters by category city rating and availability`() {
         val repo = DemoDataRepo()
 

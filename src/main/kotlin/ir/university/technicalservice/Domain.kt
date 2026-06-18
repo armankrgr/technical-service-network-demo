@@ -9,9 +9,12 @@ data class ServiceCategory(
     val key: String,
     val icon: String,
     val fa: String,
-    val en: String
+    val en: String,
+    val descriptionFa: String,
+    val descriptionEn: String
 ) {
     fun label(lang: String) = if (lang == "en") en else fa
+    fun description(lang: String) = if (lang == "en") descriptionEn else descriptionFa
 }
 
 data class TimeSlot(
@@ -31,6 +34,8 @@ data class Technician(
     val id: Long,
     val nameFa: String,
     val nameEn: String,
+    val titleFa: String,
+    val titleEn: String,
     val cityFa: String,
     val cityEn: String,
     val categoryFa: String,
@@ -42,6 +47,9 @@ data class Technician(
     val completedJobs: Int,
     val verified: Boolean,
     val distanceKm: Double,
+    val responseTimeFa: String,
+    val responseTimeEn: String,
+    val priceFromToman: Int,
     val approximateFeeFa: String,
     val approximateFeeEn: String,
     val slots: MutableList<TimeSlot>,
@@ -53,12 +61,18 @@ data class Technician(
     val availableSlotCount: Int
         get() = slots.count { !it.booked }
 
+    val reviewCount: Int
+        get() = reviews.size
+
+    fun title(lang: String) = if (lang == "en") titleEn else titleFa
     fun displayName(lang: String) = if (lang == "en") nameEn else nameFa
     fun city(lang: String) = if (lang == "en") cityEn else cityFa
     fun category(lang: String) = if (lang == "en") categoryEn else categoryFa
     fun skills(lang: String) = if (lang == "en") skillsEn else skillsFa
     fun bio(lang: String) = if (lang == "en") bioEn else bioFa
+    fun responseTime(lang: String) = if (lang == "en") responseTimeEn else responseTimeFa
     fun approximateFee(lang: String) = if (lang == "en") approximateFeeEn else approximateFeeFa
+    fun avatarText(lang: String) = displayName(lang).trim().take(1).ifBlank { "?" }
 }
 
 data class ServiceRequest(
@@ -78,12 +92,15 @@ data class SearchCriteria(
     val category: String? = null,
     val city: String? = null,
     val minRating: Double? = null,
-    val availableOnly: Boolean = false
+    val availableOnly: Boolean = false,
+    val sort: String? = "rating"
 )
 
 data class DemoStats(
     val technicianCount: Int,
     val categoryCount: Int,
     val completedJobs: Int,
-    val averageRating: Double
+    val averageRating: Double,
+    val cityCount: Int,
+    val openSlots: Int
 )

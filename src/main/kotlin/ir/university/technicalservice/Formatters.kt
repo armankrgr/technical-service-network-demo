@@ -16,6 +16,15 @@ fun stars(rating: Double): String {
     return "★".repeat(full) + "☆".repeat(5 - full)
 }
 
+fun stars(rating: Int): String = stars(rating.toDouble())
+
+fun ratingCount(tech: Technician, stars: Int): Int = tech.reviews.count { it.stars == stars }
+
+fun ratingPercent(tech: Technician, stars: Int): Int {
+    if (tech.reviews.isEmpty()) return 0
+    return ((ratingCount(tech, stars).toDouble() / tech.reviews.size) * 100).toInt().coerceIn(0, 100)
+}
+
 fun statusLabel(status: RequestStatus, lang: String): String = when (status) {
     RequestStatus.SUBMITTED -> if (lang == "en") "Pending" else "در انتظار بررسی"
     RequestStatus.ACCEPTED -> if (lang == "en") "Accepted" else "قبول شده"

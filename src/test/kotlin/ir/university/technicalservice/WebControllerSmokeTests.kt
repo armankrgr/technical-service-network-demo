@@ -54,7 +54,7 @@ class WebControllerSmokeTests(@Autowired private val mockMvc: MockMvc) {
         }.andReturn()
 
         val html = booking.response.getContentAsString(StandardCharsets.UTF_8)
-        val requestId = Regex("<span>([A-Z0-9]{8})</span>").find(html)?.groupValues?.get(1)
+        val requestId = Regex("<b>([A-Z0-9]{8})</b>").find(html)?.groupValues?.get(1)
         assertNotNull(requestId)
 
         mockMvc.get("/calendar/$requestId.ics")

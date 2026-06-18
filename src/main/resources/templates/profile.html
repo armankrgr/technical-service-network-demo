@@ -11,39 +11,80 @@
 <body>
 <div th:replace="~{fragments/layout :: nav}"></div>
 <main>
-    <section class="profile-head">
+    <section class="profile-cover">
         <div class="profile-title">
-            <div class="avatar" th:text="${#strings.substring(tech.displayName(lang),0,1)}">ر</div>
+            <div class="avatar profile-avatar" th:text="${tech.avatarText(lang)}">ر</div>
             <div>
+                <p class="eyebrow" th:text="${tech.category(lang)}">برق کاری</p>
                 <h1 th:text="${tech.displayName(lang)}">نام</h1>
-                <p th:text="${tech.category(lang)} + ' • ' + ${tech.city(lang)}">دسته</p>
-                <span class="badge" th:if="${tech.verified}" th:text="${ui.t(lang,'verified')}">verified</span>
+                <p th:text="${tech.title(lang)} + ' • ' + ${tech.city(lang)}">عنوان</p>
+                <div class="profile-badges">
+                    <span class="badge" th:if="${tech.verified}" th:text="${ui.t(lang,'verified')}">verified</span>
+                    <span class="badge neutral" th:text="${tech.responseTime(lang)}">response</span>
+                    <span class="badge neutral"><span th:text="${#numbers.formatDecimal(tech.distanceKm,1,1)}">3.2</span> km</span>
+                </div>
             </div>
         </div>
-        <div class="score">
+        <div class="score profile-score">
             <span th:text="${ratingStars}">★★★★★</span>
             <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b>
+            <small><span th:text="${tech.reviewCount}">3</span> <span th:text="${lang == 'fa' ? 'نظر ثبت شده' : 'reviews'}">نظر</span></small>
         </div>
     </section>
 
-    <div class="two-col">
-        <section>
-            <h2 th:if="${lang == 'fa'}">درباره متخصص</h2>
-            <h2 th:if="${lang == 'en'}">About</h2>
-            <p th:text="${tech.bio(lang)}">bio</p>
-            <div class="tags"><span th:each="skill : ${tech.skills(lang)}" th:text="${skill}">skill</span></div>
-            <div class="profile-stats">
-                <span><b th:text="${tech.completedJobs}">10</b><small th:text="${lang == 'fa' ? 'کار انجام شده' : 'completed jobs'}">کار</small></span>
-                <span><b th:text="${tech.distanceKm}">3</b><small>km</small></span>
-                <span><b th:text="${tech.availableSlotCount}">4</b><small th:text="${lang == 'fa' ? 'زمان آزاد' : 'open slots'}">زمان آزاد</small></span>
-            </div>
-            <p class="muted" th:text="${lang == 'fa' ? 'هزینه تقریبی: ' + tech.approximateFee(lang) : 'Approximate fee: ' + tech.approximateFee(lang)}">fee</p>
+    <section class="profile-stats wide-stats">
+        <span><b th:text="${tech.completedJobs}">10</b><small th:text="${lang == 'fa' ? 'کار انجام شده' : 'completed jobs'}">کار</small></span>
+        <span><b th:text="${tech.availableSlotCount}">4</b><small th:text="${lang == 'fa' ? 'زمان آزاد' : 'open slots'}">زمان آزاد</small></span>
+        <span><b th:text="${tech.responseTime(lang)}">امروز</b><small th:text="${lang == 'fa' ? 'میانگین پاسخگویی' : 'response time'}">پاسخگویی</small></span>
+        <span><b th:text="${tech.approximateFee(lang)}">fee</b><small th:text="${lang == 'fa' ? 'هزینه شروع' : 'starting fee'}">هزینه</small></span>
+    </section>
 
+    <div class="profile-layout">
+        <div class="profile-content">
+            <section class="panel about-panel">
+                <div class="panel-head">
+                    <div>
+                        <h2 th:if="${lang == 'fa'}">درباره متخصص</h2>
+                        <h2 th:if="${lang == 'en'}">About This Specialist</h2>
+                        <p th:text="${lang == 'fa' ? 'خلاصه تجربه، مهارت ها و نحوه انجام خدمت' : 'Experience summary, skills, and service approach'}">خلاصه</p>
+                    </div>
+                </div>
+                <p th:text="${tech.bio(lang)}">bio</p>
+                <div class="tags service-tags"><span th:each="skill : ${tech.skills(lang)}" th:text="${skill}">skill</span></div>
+                <div class="service-detail-list">
+                    <div><span th:text="${lang == 'fa' ? 'شهر پوشش' : 'Coverage city'}">شهر</span><b th:text="${tech.city(lang)}">تهران</b></div>
+                    <div><span th:text="${lang == 'fa' ? 'دسته خدمت' : 'Service category'}">دسته</span><b th:text="${tech.category(lang)}">برق کاری</b></div>
+                    <div><span th:text="${lang == 'fa' ? 'شروع قیمت' : 'Starting price'}">قیمت</span><b th:text="${tech.approximateFee(lang)}">fee</b></div>
+                    <div><span th:text="${lang == 'fa' ? 'وضعیت تایید' : 'Verification'}">تایید</span><b th:text="${tech.verified ? ui.t(lang,'verified') : (lang == 'fa' ? 'در انتظار تایید' : 'pending')}">verified</b></div>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div id="reviews" th:replace="~{fragments/reviews :: reviews}"></div>
+            </section>
+
+            <section class="panel similar-panel">
+                <div class="section-head">
+                    <div>
+                        <h2 th:text="${lang == 'fa' ? 'متخصصان مشابه' : 'Similar Specialists'}">متخصصان مشابه</h2>
+                        <p class="muted" th:text="${lang == 'fa' ? 'برای مقایسه سریع در همان دسته یا شهرهای نزدیک.' : 'Quick comparison from the same category or nearby cities.'}">similar</p>
+                    </div>
+                </div>
+                <div class="similar-grid">
+                    <a class="mini-tech-card" th:each="similar : ${similarTechnicians}" th:href="@{/technicians/{id}(id=${similar.id})}">
+                        <div class="avatar tiny-avatar" th:text="${similar.avatarText(lang)}">س</div>
+                        <div>
+                            <strong th:text="${similar.displayName(lang)}">نام</strong>
+                            <span th:text="${similar.city(lang)} + ' • ' + ${#numbers.formatDecimal(similar.ratingAverage,1,1)}">شهر</span>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <aside class="booking-side">
             <div th:replace="~{fragments/booking-panel :: bookingPanel}"></div>
-        </section>
-        <section>
-            <div id="reviews" th:replace="~{fragments/reviews :: reviews}"></div>
-        </section>
+        </aside>
     </div>
 </main>
 </body>

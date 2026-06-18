@@ -10,97 +10,140 @@
 </head>
 <body>
 <div th:replace="~{fragments/layout :: nav}"></div>
-<main>
-    <section class="hero">
-        <div>
-            <p class="eyebrow" th:text="${lang == 'fa' ? 'بازارچه خدمات فنی محلی' : 'Local technical service marketplace'}">بازارچه خدمات فنی محلی</p>
-            <h1 th:text="${ui.t(lang,'appName')}">سامانه شبکه ارتباطی بین افراد فنی</h1>
-            <p th:if="${lang == 'fa'}">کاربر در چند دقیقه متخصص مناسب را پیدا می کند، زمان آزاد را رزرو می کند و بعد از انجام کار بازخورد می دهد.</p>
-            <p th:if="${lang == 'en'}">Customers can quickly find a suitable specialist, reserve an available slot, and leave feedback after the job.</p>
+<main class="home-main">
+    <section class="hero hero-home">
+        <div class="hero-copy">
+            <p class="eyebrow" th:text="${lang == 'fa' ? 'دموی دانشگاهی سیستم تحلیل و طراحی' : 'Systems analysis and design demo'}">دموی دانشگاهی سیستم تحلیل و طراحی</p>
+            <h1 th:if="${lang == 'fa'}">درخواست خدمات فنی؛ سریع، قابل اعتماد، قابل پیگیری</h1>
+            <h1 th:if="${lang == 'en'}">Technical service requests, booked and tracked clearly</h1>
+            <p th:if="${lang == 'fa'}">کاربر دسته خدمت را انتخاب می کند، متخصص های نزدیک را با امتیاز و زمان آزاد می بیند، رزرو را ثبت می کند و بعد از انجام کار بازخورد می دهد.</p>
+            <p th:if="${lang == 'en'}">Customers choose a service category, compare nearby specialists by rating and availability, submit a booking, and review the completed work.</p>
             <div class="hero-actions">
-                <a class="btn primary" th:href="@{/technicians}" th:text="${ui.t(lang,'search')}">جستجو</a>
-                <a class="btn ghost" th:href="@{/technician/dashboard}" th:text="${ui.t(lang,'dashboard')}">داشبورد</a>
+                <a class="btn primary" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'شروع جستجو' : 'Start searching'}">شروع جستجو</a>
+                <a class="btn ghost" th:href="@{/technician/dashboard}" th:text="${lang == 'fa' ? 'دیدن داشبورد' : 'Open dashboard'}">دیدن داشبورد</a>
+            </div>
+            <div class="trust-row" aria-label="trust badges">
+                <span th:text="${lang == 'fa' ? 'تایید مدارک متخصص' : 'Verified specialists'}">تایید مدارک متخصص</span>
+                <span th:text="${lang == 'fa' ? 'رزرو زمان آزاد' : 'Open slot booking'}">رزرو زمان آزاد</span>
+                <span th:text="${lang == 'fa' ? 'تقویم و پیگیری وضعیت' : 'Calendar and tracking'}">تقویم و پیگیری وضعیت</span>
             </div>
         </div>
-        <div class="hero-panel marketplace-panel">
-            <span class="panel-label" th:text="${lang == 'fa' ? 'نقش فعلی' : 'Current role'}">نقش فعلی</span>
-            <strong th:text="${role}">CUSTOMER</strong>
-            <div class="mini-flow">
-                <span th:text="${lang == 'fa' ? 'جستجو' : 'Search'}">جستجو</span>
-                <span th:text="${lang == 'fa' ? 'رزرو' : 'Book'}">رزرو</span>
-                <span th:text="${lang == 'fa' ? 'بازخورد' : 'Review'}">بازخورد</span>
+        <div class="hero-visual" aria-hidden="true">
+            <div class="phone-frame">
+                <div class="phone-top"></div>
+                <div class="phone-card main-ticket">
+                    <span>Service Request</span>
+                    <strong th:text="${lang == 'fa' ? 'برق کاری' : 'Electrical'}">برق کاری</strong>
+                    <small th:text="${lang == 'fa' ? 'امروز ۱۸:۰۰ - تایید مدارک' : 'Today 18:00 - verified'}">امروز ۱۸:۰۰</small>
+                </div>
+                <div class="phone-card compact-ticket">
+                    <b>4.8</b>
+                    <span th:text="${lang == 'fa' ? 'امتیاز میانگین' : 'average rating'}">امتیاز</span>
+                </div>
+                <svg viewBox="0 0 360 210" role="img" aria-label="Service network illustration">
+                    <path d="M55 162 C92 89 148 78 185 126 S271 161 310 63" fill="none" stroke="#0f766e" stroke-width="8" stroke-linecap="round"/>
+                    <circle cx="55" cy="162" r="18" fill="#0f766e"/>
+                    <circle cx="185" cy="126" r="18" fill="#c2410c"/>
+                    <circle cx="310" cy="63" r="18" fill="#334155"/>
+                    <rect x="25" y="32" width="86" height="44" rx="8" fill="#ffffff" stroke="#d9e2ec"/>
+                    <rect x="138" y="18" width="98" height="52" rx="8" fill="#ffffff" stroke="#d9e2ec"/>
+                    <rect x="244" y="122" width="88" height="48" rx="8" fill="#ffffff" stroke="#d9e2ec"/>
+                </svg>
             </div>
         </div>
     </section>
 
     <section>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <b th:text="${stats.technicianCount}">7</b>
-                <span th:text="${lang == 'fa' ? 'متخصص فعال' : 'active specialists'}">متخصص فعال</span>
-            </div>
-            <div class="stat-card">
-                <b th:text="${stats.categoryCount}">7</b>
-                <span th:text="${lang == 'fa' ? 'دسته خدمت' : 'service categories'}">دسته خدمت</span>
-            </div>
-            <div class="stat-card">
-                <b th:text="${stats.completedJobs}">500</b>
-                <span th:text="${lang == 'fa' ? 'کار انجام شده' : 'completed jobs'}">کار انجام شده</span>
-            </div>
-            <div class="stat-card">
-                <b th:text="${#numbers.formatDecimal(stats.averageRating,1,1)}">4.7</b>
-                <span th:text="${lang == 'fa' ? 'میانگین امتیاز' : 'average rating'}">میانگین امتیاز</span>
-            </div>
+        <div class="stats-grid hero-stats">
+            <div class="stat-card"><b th:attr="data-count=${stats.technicianCount}" th:text="${stats.technicianCount}">24</b><span th:text="${lang == 'fa' ? 'متخصص فعال' : 'active specialists'}">متخصص فعال</span></div>
+            <div class="stat-card"><b th:attr="data-count=${stats.categoryCount}" th:text="${stats.categoryCount}">15</b><span th:text="${lang == 'fa' ? 'دسته خدمت' : 'service categories'}">دسته خدمت</span></div>
+            <div class="stat-card"><b th:attr="data-count=${stats.cityCount}" th:text="${stats.cityCount}">8</b><span th:text="${lang == 'fa' ? 'شهر نمونه' : 'demo cities'}">شهر نمونه</span></div>
+            <div class="stat-card"><b th:attr="data-count=${stats.openSlots}" th:text="${stats.openSlots}">98</b><span th:text="${lang == 'fa' ? 'زمان آزاد' : 'open slots'}">زمان آزاد</span></div>
+            <div class="stat-card"><b th:text="${#numbers.formatDecimal(stats.averageRating,1,1)}">4.7</b><span th:text="${lang == 'fa' ? 'میانگین امتیاز' : 'average rating'}">میانگین امتیاز</span></div>
         </div>
     </section>
 
     <section>
         <div class="section-head">
-            <h2 th:if="${lang == 'fa'}">دسته بندی خدمات</h2>
-            <h2 th:if="${lang == 'en'}">Service categories</h2>
+            <div>
+                <p class="eyebrow" th:text="${lang == 'fa' ? 'انتخاب سریع خدمت' : 'Quick service discovery'}">انتخاب سریع خدمت</p>
+                <h2 th:if="${lang == 'fa'}">دسته بندی خدمات</h2>
+                <h2 th:if="${lang == 'en'}">Service Categories</h2>
+            </div>
+            <a class="btn small ghost" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'همه متخصصان' : 'All specialists'}">همه متخصصان</a>
         </div>
-        <div class="category-grid">
-            <a class="category-card" th:each="cat : ${categories}" th:href="@{/technicians(category=${cat.fa})}">
+        <div class="category-grid rich-categories">
+            <a class="category-card" th:each="cat : ${categories}" th:href="@{/technicians(category=${cat.key})}">
                 <span class="category-icon" th:text="${cat.icon}">•</span>
                 <strong th:text="${cat.label(lang)}">برق کاری</strong>
-                <small th:if="${lang == 'fa'}">مشاهده متخصصان</small>
-                <small th:if="${lang == 'en'}">View specialists</small>
+                <p th:text="${cat.description(lang)}">توضیح دسته</p>
+                <small><b th:text="${categoryCounts[cat.fa]}">2</b> <span th:text="${lang == 'fa' ? 'متخصص فعال' : 'active specialists'}">متخصص فعال</span></small>
             </a>
         </div>
     </section>
 
     <section>
         <div class="section-head">
-            <h2 th:text="${ui.t(lang,'featured')}">متخصصان پیشنهادی</h2>
+            <div>
+                <p class="eyebrow" th:text="${lang == 'fa' ? 'پیشنهاد برای شروع دمو' : 'Demo-ready recommendations'}">پیشنهاد برای شروع دمو</p>
+                <h2 th:text="${ui.t(lang,'featured')}">متخصصان پیشنهادی</h2>
+            </div>
         </div>
         <div class="tech-grid">
-            <article class="tech-card" th:each="tech : ${featured}">
+            <article class="tech-card elevated" th:each="tech : ${featured}">
                 <div class="card-top">
-                    <div>
-                        <h3 th:text="${tech.displayName(lang)}">نام</h3>
-                        <p th:text="${tech.category(lang)} + ' • ' + ${tech.city(lang)}">دسته</p>
+                    <div class="identity">
+                        <div class="avatar small-avatar" th:text="${tech.avatarText(lang)}">ر</div>
+                        <div>
+                            <h3 th:text="${tech.displayName(lang)}">نام</h3>
+                            <p th:text="${tech.title(lang)}">عنوان</p>
+                        </div>
                     </div>
                     <span class="badge" th:if="${tech.verified}" th:text="${ui.t(lang,'verified')}">تایید شده</span>
                 </div>
-                <div class="rating"><span th:text="${T(ir.university.technicalservice.FormattersKt).stars(tech.ratingAverage)}">★★★★★</span> <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b></div>
-                <p th:text="${tech.bio(lang)}">bio</p>
+                <div class="rating-row">
+                    <span class="rating" th:text="${T(ir.university.technicalservice.FormattersKt).stars(tech.ratingAverage)}">★★★★★</span>
+                    <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b>
+                    <small><span th:text="${tech.reviewCount}">3</span> <span th:text="${lang == 'fa' ? 'نظر' : 'reviews'}">نظر</span></small>
+                </div>
+                <p class="muted" th:text="${tech.city(lang)} + ' • ' + ${tech.category(lang)} + ' • ' + ${tech.responseTime(lang)}">شهر</p>
                 <div class="card-meta">
+                    <span><b th:text="${tech.completedJobs}">132</b> <span th:text="${lang == 'fa' ? 'کار' : 'jobs'}">کار</span></span>
                     <span><b th:text="${tech.availableSlotCount}">4</b> <span th:text="${lang == 'fa' ? 'زمان آزاد' : 'open slots'}">زمان آزاد</span></span>
                     <span th:text="${tech.approximateFee(lang)}">fee</span>
                 </div>
-                <a class="btn small" th:href="@{/technicians/{id}(id=${tech.id})}" th:text="${lang == 'fa' ? 'مشاهده پروفایل' : 'View profile'}">پروفایل</a>
+                <div class="tags"><span th:each="skill, iter : ${tech.skills(lang)}" th:if="${iter.index < 3}" th:text="${skill}">skill</span></div>
+                <a class="btn small" th:href="@{/technicians/{id}(id=${tech.id})}" th:text="${lang == 'fa' ? 'مشاهده و رزرو' : 'View and book'}">مشاهده و رزرو</a>
             </article>
         </div>
     </section>
 
-    <section id="admin-owner">
+    <section id="admin-owner" class="admin-owner-section">
         <div class="section-head">
-            <h2 th:text="${ui.t(lang,'adminOwner')}">مدیریت</h2>
+            <div>
+                <p class="eyebrow" th:text="${lang == 'fa' ? 'نقش های مدیریتی در تحلیل سیستم' : 'Management roles in the system analysis'}">نقش های مدیریتی</p>
+                <h2 th:text="${ui.t(lang,'adminOwner')}">مدیریت و مالک سیستم</h2>
+            </div>
         </div>
         <div class="info-grid">
-            <div class="info-card"><span class="info-kicker">Admin</span><h3 th:text="${lang == 'fa' ? 'مدیریت کیفیت شبکه' : 'Network quality control'}">مدیریت کیفیت شبکه</h3><p th:text="${lang == 'fa' ? 'مدیریت کاربران و متخصصان، تایید مدارک، رسیدگی به گزارش ها.' : 'Manage users and specialists, verify documents, and handle reports.'}">مدیریت کاربران و متخصصان.</p></div>
-            <div class="info-card"><span class="info-kicker">Owner</span><h3 th:text="${lang == 'fa' ? 'تصمیم های توسعه' : 'Expansion decisions'}">تصمیم های توسعه</h3><p th:text="${lang == 'fa' ? 'مشاهده تحلیل ها، برنامه توسعه شهری، و مدل درآمدی سامانه.' : 'Review analytics, city expansion, and revenue model ideas.'}">تحلیل ها.</p></div>
-            <div class="info-card"><span class="info-kicker">SAD</span><h3 th:text="${lang == 'fa' ? 'سناریوی درس' : 'Course scenario'}">سناریوی درس</h3><p th:text="${lang == 'fa' ? 'نمایش نقش ها، جریان درخواست، بازخورد، تقویم و داشبورد عملیاتی.' : 'Shows roles, request flow, feedback, calendar export, and operational dashboard.'}">نمایش نقش ها.</p></div>
+            <div class="info-card">
+                <span class="info-kicker">Admin</span>
+                <h3 th:text="${lang == 'fa' ? 'کنترل کیفیت شبکه' : 'Network Quality Control'}">کنترل کیفیت شبکه</h3>
+                <p th:text="${lang == 'fa' ? 'بررسی مدارک متخصصان، رسیدگی به گزارش ها، کنترل دسته بندی ها و پایش درخواست های حساس.' : 'Verify specialist documents, handle reports, maintain categories, and monitor sensitive requests.'}">مدیریت کاربران.</p>
+                <div class="mini-metrics"><span>24</span><span>15</span><span>8</span></div>
+            </div>
+            <div class="info-card">
+                <span class="info-kicker">Owner</span>
+                <h3 th:text="${lang == 'fa' ? 'تصمیم های توسعه و درآمد' : 'Growth and Revenue Decisions'}">تصمیم های توسعه</h3>
+                <p th:text="${lang == 'fa' ? 'مشاهده شهرهای فعال، دسته های پرترافیک، نرخ تبدیل رزرو و مسیر توسعه نسخه بعدی سامانه.' : 'Review active cities, high-traffic categories, booking conversion, and the next product roadmap.'}">تحلیل ها.</p>
+                <div class="mini-metrics"><span>4.7</span><span>+2</span><span>98</span></div>
+            </div>
+            <div class="info-card">
+                <span class="info-kicker">SAD</span>
+                <h3 th:text="${lang == 'fa' ? 'پوشش سناریوی ارائه' : 'Presentation Scenario Coverage'}">پوشش سناریوی ارائه</h3>
+                <p th:text="${lang == 'fa' ? 'این دمو نقش مشتری، متخصص، مدیر و مالک را همراه با جستجو، رزرو، تقویم، بازخورد و داشبورد نشان می دهد.' : 'The demo shows customer, specialist, admin, and owner roles with search, booking, calendar, reviews, and dashboard flow.'}">سناریو.</p>
+                <div class="mini-metrics"><span>HTMX</span><span>RTL</span><span>Demo</span></div>
+            </div>
         </div>
     </section>
 </main>

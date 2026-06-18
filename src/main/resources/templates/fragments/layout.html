@@ -2,8 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 <nav th:fragment="nav" class="topbar">
-    <a class="brand" th:href="@{/}" th:text="${ui.t(lang,'appName')}">سامانه</a>
-    <div class="nav-links">
+    <a class="brand" th:href="@{/}">
+        <span class="brand-mark">TS</span>
+        <span th:text="${ui.t(lang,'appName')}">سامانه</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" data-nav-toggle>☰</button>
+    <div id="primary-nav" class="nav-links">
         <a th:href="@{/}" th:text="${ui.t(lang,'home')}">خانه</a>
         <a th:href="@{/technicians}" th:text="${ui.t(lang,'technicians')}">متخصصان</a>
         <a th:href="@{/technician/dashboard}" th:text="${ui.t(lang,'dashboard')}">داشبورد</a>

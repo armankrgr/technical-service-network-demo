@@ -4,22 +4,43 @@
             <h2 th:text="${ui.t(lang,'reviews')}">نظرها</h2>
             <p th:text="${lang == 'fa' ? 'بازخورد مشتریان بعد از انجام خدمت' : 'Customer feedback after completed work'}">بازخورد</p>
         </div>
+        <div class="rating-summary">
+            <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b>
+            <span class="rating" th:text="${ratingStars}">★★★★★</span>
+            <small><span th:text="${tech.reviewCount}">3</span> <span th:text="${lang == 'fa' ? 'نظر' : 'reviews'}">نظر</span></small>
+        </div>
     </div>
-    <div class="rating big"><span th:text="${ratingStars}">★★★★★</span> <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b></div>
-    <div class="alert success" th:if="${reviewSaved}" th:text="${lang == 'fa' ? 'نظر شما ثبت شد و امتیاز به روز شد.' : 'Your review was saved and the rating was updated.'}">ثبت شد</div>
+
+    <div class="rating-bars">
+        <div th:each="star : ${#numbers.sequence(1,5)}">
+            <span th:text="${star} + '★'">5★</span>
+            <div class="bar"><i th:style="${'width:' + T(ir.university.technicalservice.FormattersKt).ratingPercent(tech, star) + '%'}"></i></div>
+            <small th:text="${T(ir.university.technicalservice.FormattersKt).ratingCount(tech, star)}">0</small>
+        </div>
+    </div>
+
+    <div class="alert success" th:if="${reviewSaved}" data-toast th:attr="data-toast-message=${lang == 'fa' ? 'نظر شما ثبت شد' : 'Review saved'}" th:text="${lang == 'fa' ? 'نظر شما ثبت شد و امتیاز به روز شد.' : 'Your review was saved and the rating was updated.'}">ثبت شد</div>
     <div class="alert error" th:if="${reviewError != null}" th:text="${reviewError}">error</div>
-    <form class="stack compact" th:hx-post="@{/technicians/{id}/reviews(id=${tech.id})}" hx-target="#reviews" hx-swap="outerHTML">
+
+    <form class="stack compact review-form" th:hx-post="@{/technicians/{id}/reviews(id=${tech.id})}" hx-target="#reviews" hx-swap="outerHTML">
         <input name="author" required th:placeholder="${lang == 'fa' ? 'نام شما' : 'Your name'}">
-        <select name="stars" required>
-            <option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>
-        </select>
+        <div class="star-picker" role="radiogroup" th:attr="aria-label=${lang == 'fa' ? 'انتخاب امتیاز' : 'Choose rating'}">
+            <label th:each="star : ${#numbers.sequence(1,5)}">
+                <input type="radio" name="stars" th:value="${star}" th:checked="${star == 5}" required>
+                <span th:text="${T(ir.university.technicalservice.FormattersKt).stars(star)}">★★★★★</span>
+            </label>
+        </div>
         <textarea name="comment" required th:placeholder="${lang == 'fa' ? 'نظر شما' : 'Your comment'}"></textarea>
         <button class="btn primary" type="submit" th:text="${lang == 'fa' ? 'ثبت نظر' : 'Submit review'}">ثبت نظر</button>
     </form>
+
     <div class="empty-state small" th:if="${tech.reviews.isEmpty()}" th:text="${lang == 'fa' ? 'هنوز نظری ثبت نشده است.' : 'No reviews yet.'}">empty</div>
     <article class="review" th:each="review : ${tech.reviews}">
         <div class="review-top">
-            <strong th:text="${review.author}">author</strong>
+            <div>
+                <strong th:text="${review.author}">author</strong>
+                <small th:text="${T(ir.university.technicalservice.FormattersKt).ui(review.createdAt)}">date</small>
+            </div>
             <span class="rating" th:text="${T(ir.university.technicalservice.FormattersKt).stars(review.stars)}">★★★★★</span>
         </div>
         <p th:text="${review.comment}">comment</p>

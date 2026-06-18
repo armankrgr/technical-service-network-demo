@@ -11,17 +11,48 @@
 <body>
 <div th:replace="~{fragments/layout :: nav}"></div>
 <main>
-    <section class="page-head">
-        <h1 th:text="${ui.t(lang,'dashboard')}">داشبورد متخصص</h1>
-        <p th:if="${lang == 'fa'}">متخصص می تواند وضعیت درخواست های ثبت شده را سریع بررسی کند.</p>
-        <p th:if="${lang == 'en'}">Specialists can quickly review submitted service requests.</p>
+    <section class="page-head dashboard-head">
+        <div>
+            <p class="eyebrow" th:text="${lang == 'fa' ? 'نمای عملیاتی برای نقش متخصص' : 'Operational view for specialists'}">نمای عملیاتی</p>
+            <h1 th:text="${ui.t(lang,'dashboard')}">داشبورد متخصص</h1>
+            <p th:if="${lang == 'fa'}">متخصص می تواند درخواست های ثبت شده، وضعیت هر درخواست و اقدام بعدی را سریع بررسی کند.</p>
+            <p th:if="${lang == 'en'}">Specialists can review submitted requests, each status, and the next action quickly.</p>
+        </div>
+        <a class="btn ghost" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'رزرو نمونه جدید' : 'Create a demo booking'}">رزرو نمونه</a>
     </section>
-    <section class="stats-grid compact-stats">
-        <div class="stat-card"><b th:text="${submittedCount}">0</b><span th:text="${lang == 'fa' ? 'در انتظار' : 'pending'}">در انتظار</span></div>
+
+    <section class="stats-grid compact-stats dashboard-stats">
+        <div class="stat-card"><b th:text="${totalRequests}">0</b><span th:text="${lang == 'fa' ? 'کل درخواست ها' : 'total requests'}">کل درخواست ها</span></div>
+        <div class="stat-card"><b th:text="${submittedCount}">0</b><span th:text="${lang == 'fa' ? 'در انتظار بررسی' : 'pending'}">در انتظار</span></div>
         <div class="stat-card"><b th:text="${acceptedCount}">0</b><span th:text="${lang == 'fa' ? 'قبول شده' : 'accepted'}">قبول شده</span></div>
         <div class="stat-card"><b th:text="${rejectedCount}">0</b><span th:text="${lang == 'fa' ? 'رد شده' : 'rejected'}">رد شده</span></div>
     </section>
-    <div id="request-table" th:replace="~{fragments/request-table :: requestTable}"></div>
+
+    <section class="dashboard-grid">
+        <div>
+            <div class="section-head">
+                <div>
+                    <h2 th:text="${lang == 'fa' ? 'درخواست های خدمت' : 'Service Requests'}">درخواست ها</h2>
+                    <p class="muted" th:text="${lang == 'fa' ? 'اقدام ها با HTMX در همان صفحه به روز می شوند.' : 'Actions update in place with HTMX.'}">HTMX</p>
+                </div>
+            </div>
+            <div id="request-table" th:replace="~{fragments/request-table :: requestTable}"></div>
+        </div>
+        <aside class="panel timeline-panel">
+            <div class="panel-head">
+                <div>
+                    <h2 th:text="${lang == 'fa' ? 'جریان وضعیت' : 'Status Flow'}">جریان وضعیت</h2>
+                    <p th:text="${lang == 'fa' ? 'نمایش ساده چرخه درخواست در دمو' : 'Simple request lifecycle for the demo'}">timeline</p>
+                </div>
+            </div>
+            <ol class="demo-timeline">
+                <li><b th:text="${lang == 'fa' ? 'ثبت درخواست' : 'Submitted'}">ثبت درخواست</b><span th:text="${lang == 'fa' ? 'کاربر زمان و توضیح مکان را ثبت می کند.' : 'Customer chooses a slot and location note.'}">step</span></li>
+                <li><b th:text="${lang == 'fa' ? 'بررسی متخصص' : 'Specialist review'}">بررسی</b><span th:text="${lang == 'fa' ? 'متخصص درخواست را قبول یا رد می کند.' : 'Specialist accepts or rejects the request.'}">step</span></li>
+                <li><b th:text="${lang == 'fa' ? 'تقویم و پیگیری' : 'Calendar and tracking'}">تقویم</b><span th:text="${lang == 'fa' ? 'فایل تقویم و وضعیت در داشبورد قابل مشاهده است.' : 'Calendar file and status stay visible.'}">step</span></li>
+                <li><b th:text="${lang == 'fa' ? 'ثبت بازخورد' : 'Review'}">بازخورد</b><span th:text="${lang == 'fa' ? 'بعد از انجام کار، نظر مشتری به پروفایل اضافه می شود.' : 'After the job, customer feedback updates the profile.'}">step</span></li>
+            </ol>
+        </aside>
+    </section>
 </main>
 </body>
 </html>
