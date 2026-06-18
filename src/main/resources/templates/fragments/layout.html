@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="nav" class="topbar">
+    <a class="brand" th:href="@{/}" th:text="${ui.t(lang,'appName')}">سامانه</a>
+    <div class="nav-links">
+        <a th:href="@{/}" th:text="${ui.t(lang,'home')}">خانه</a>
+        <a th:href="@{/technicians}" th:text="${ui.t(lang,'technicians')}">متخصصان</a>
+        <a th:href="@{/technician/dashboard}" th:text="${ui.t(lang,'dashboard')}">داشبورد</a>
+        <a th:href="@{/#admin-owner}" th:text="${ui.t(lang,'adminOwner')}">مدیریت</a>
+    </div>
+    <form class="nav-controls" method="get">
+        <select name="role" onchange="this.form.submit()" th:title="${ui.t(lang,'role')}">
+            <option th:value="CUSTOMER" th:selected="${role == 'CUSTOMER'}" th:text="${ui.t(lang,'customer')}">Customer</option>
+            <option th:value="TECHNICIAN" th:selected="${role == 'TECHNICIAN'}" th:text="${ui.t(lang,'technicianRole')}">Technician</option>
+            <option th:value="ADMIN" th:selected="${role == 'ADMIN'}" th:text="${ui.t(lang,'admin')}">Admin</option>
+            <option th:value="OWNER" th:selected="${role == 'OWNER'}" th:text="${ui.t(lang,'owner')}">Owner</option>
+        </select>
+        <button class="chip" name="lang" value="fa" th:classappend="${lang == 'fa'} ? ' active'">FA</button>
+        <button class="chip" name="lang" value="en" th:classappend="${lang == 'en'} ? ' active'">EN</button>
+    </form>
+</nav>
+</body>
+</html>

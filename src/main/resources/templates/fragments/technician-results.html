@@ -1,0 +1,24 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="results">
+    <div class="result-count">
+        <span th:text="${technicians.size()}">0</span>
+        <span th:text="${lang == 'fa' ? 'متخصص پیدا شد' : 'technicians found'}">متخصص</span>
+    </div>
+    <div class="tech-grid">
+        <article class="tech-card" th:each="tech : ${technicians}">
+            <div class="card-top">
+                <div>
+                    <h3 th:text="${tech.displayName(lang)}">نام</h3>
+                    <p th:text="${tech.category(lang)} + ' • ' + ${tech.city(lang)}">دسته</p>
+                </div>
+                <span class="badge" th:if="${tech.verified}" th:text="${ui.t(lang,'verified')}">تایید شده</span>
+            </div>
+            <div class="rating">
+                <span th:text="${T(ir.university.technicalservice.FormattersKt).stars(tech.ratingAverage)}">★★★★★</span>
+                <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b>
+            </div>
+            <p class="muted"><span th:text="${tech.completedJobs}">10</span> <span th:text="${lang == 'fa' ? 'کار انجام شده' : 'completed jobs'}">کار</span> • <span th:text="${tech.distanceKm}">3</span> km • <span th:text="${tech.approximateFee}">fee</span></p>
+            <div class="tags"><span th:each="skill : ${tech.skills(lang)}" th:text="${skill}">skill</span></div>
+            <a class="btn small" th:href="@{/technicians/{id}(id=${tech.id})}" th:text="${lang == 'fa' ? 'مشاهده پروفایل' : 'View profile'}">پروفایل</a>
+        </article>
+    </div>
+</div>

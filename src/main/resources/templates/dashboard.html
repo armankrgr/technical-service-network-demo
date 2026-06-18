@@ -1,0 +1,21 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}" th:dir="${dir}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${ui.t(lang,'dashboard')}">داشبورد</title>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main>
+    <section class="page-head">
+        <h1 th:text="${ui.t(lang,'dashboard')}">داشبورد متخصص</h1>
+        <p th:if="${lang == 'fa'}">درخواست های ثبت شده را با HTMX قبول یا رد کنید.</p>
+        <p th:if="${lang == 'en'}">Accept or reject submitted requests with HTMX.</p>
+    </section>
+    <div id="request-table" th:replace="~{fragments/request-table :: requestTable}"></div>
+</main>
+</body>
+</html>

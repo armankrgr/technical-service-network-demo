@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}" th:dir="${dir}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${ui.t(lang,'technicians')}">متخصصان</title>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main>
+    <section class="page-head">
+        <h1 th:text="${ui.t(lang,'search')}">جستجو و فیلتر زنده</h1>
+        <p th:if="${lang == 'fa'}">با HTMX نتایج بدون بارگذاری کامل صفحه تازه می شوند.</p>
+        <p th:if="${lang == 'en'}">HTMX refreshes the result list without a full page reload.</p>
+    </section>
+
+    <form class="filters" hx-get="/technicians/results" hx-target="#results" hx-trigger="input changed delay:350ms, change">
+        <input name="q" th:value="${criteria.q}" th:placeholder="${lang == 'fa' ? 'نام، مهارت یا عنوان خدمت' : 'Name, skill, or service'}">
+        <select name="category">
+            <option value="" th:text="${lang == 'fa' ? 'همه دسته ها' : 'All categories'}">همه</option>
+            <option th:each="cat : ${categoriesFa}" th:value="${cat}" th:text="${cat}" th:selected="${criteria.category == cat}">cat</option>
+        </select>
+        <select name="city">
+            <option value="" th:text="${lang == 'fa' ? 'همه شهرها' : 'All cities'}">همه</option>
+            <option th:each="city : ${citiesFa}" th:value="${city}" th:text="${city}" th:selected="${criteria.city == city}">city</option>
+        </select>
+        <select name="minRating">
+            <option value="" th:text="${lang == 'fa' ? 'حداقل امتیاز' : 'Minimum rating'}">rating</option>
+            <option value="3">3+</option>
+            <option value="4">4+</option>
+            <option value="4.5">4.5+</option>
+        </select>
+        <label class="check"><input type="checkbox" name="availableOnly" value="true" th:checked="${criteria.availableOnly}"> <span th:text="${ui.t(lang,'available')}">فقط زمان دار</span></label>
+    </form>
+    <div id="results" th:replace="~{fragments/technician-results :: results}"></div>
+</main>
+</body>
+</html>

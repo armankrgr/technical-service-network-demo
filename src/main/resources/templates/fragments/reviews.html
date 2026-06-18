@@ -1,0 +1,17 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="reviews" id="reviews">
+    <h2 th:text="${ui.t(lang,'reviews')}">نظرها</h2>
+    <div class="rating big"><span th:text="${ratingStars}">★★★★★</span> <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b></div>
+    <form class="stack compact" th:hx-post="@{/technicians/{id}/reviews(id=${tech.id})}" hx-target="#reviews" hx-swap="outerHTML">
+        <input name="author" required th:placeholder="${lang == 'fa' ? 'نام شما' : 'Your name'}">
+        <select name="stars" required>
+            <option value="5">5</option><option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>
+        </select>
+        <textarea name="comment" required th:placeholder="${lang == 'fa' ? 'نظر شما' : 'Your comment'}"></textarea>
+        <button class="btn primary" type="submit" th:text="${lang == 'fa' ? 'ثبت نظر' : 'Submit review'}">ثبت نظر</button>
+    </form>
+    <article class="review" th:each="review : ${tech.reviews}">
+        <strong th:text="${review.author}">author</strong>
+        <span class="rating" th:text="${T(ir.university.technicalservice.FormattersKt).stars(review.stars)}">★★★★★</span>
+        <p th:text="${review.comment}">comment</p>
+    </article>
+</div>

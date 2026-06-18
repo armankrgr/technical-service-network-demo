@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}" th:dir="${dir}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${tech.displayName(lang)}">Profile</title>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main>
+    <section class="profile-head">
+        <div>
+            <h1 th:text="${tech.displayName(lang)}">نام</h1>
+            <p th:text="${tech.category(lang)} + ' • ' + ${tech.city(lang)}">دسته</p>
+            <span class="badge" th:if="${tech.verified}" th:text="${ui.t(lang,'verified')}">verified</span>
+        </div>
+        <div class="score">
+            <span th:text="${ratingStars}">★★★★★</span>
+            <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b>
+        </div>
+    </section>
+
+    <div class="two-col">
+        <section>
+            <h2 th:if="${lang == 'fa'}">درباره متخصص</h2>
+            <h2 th:if="${lang == 'en'}">About</h2>
+            <p th:text="${tech.bio(lang)}">bio</p>
+            <div class="tags"><span th:each="skill : ${tech.skills(lang)}" th:text="${skill}">skill</span></div>
+            <p class="muted"><span th:text="${tech.completedJobs}">10</span> <span th:text="${lang == 'fa' ? 'کار انجام شده' : 'completed jobs'}">کار</span> • <span th:text="${tech.distanceKm}">3</span> km • <span th:text="${tech.approximateFee}">fee</span></p>
+
+            <h2 th:text="${ui.t(lang,'book')}">ثبت درخواست</h2>
+            <form class="stack" th:hx-post="@{/technicians/{id}/book(id=${tech.id})}" hx-target="#booking-result">
+                <input name="customerName" required th:placeholder="${lang == 'fa' ? 'نام مشتری' : 'Customer name'}">
+                <input name="title" required th:placeholder="${lang == 'fa' ? 'عنوان درخواست' : 'Request title'}">
+                <textarea name="locationNote" required th:placeholder="${lang == 'fa' ? 'آدرس یا توضیح مکان' : 'Address or location note'}"></textarea>
+                <select name="slotId" required>
+                    <option value="" th:text="${lang == 'fa' ? 'انتخاب زمان' : 'Select time'}">slot</option>
+                    <option th:each="slot : ${tech.slots}" th:if="${!slot.booked}" th:value="${slot.id}" th:text="${T(ir.university.technicalservice.FormattersKt).ui(slot.start)}">time</option>
+                </select>
+                <button class="btn primary" type="submit" th:text="${ui.t(lang,'book')}">ثبت</button>
+            </form>
+            <div id="booking-result"></div>
+        </section>
+        <section>
+            <div id="reviews" th:replace="~{fragments/reviews :: reviews}"></div>
+        </section>
+    </div>
+</main>
+</body>
+</html>

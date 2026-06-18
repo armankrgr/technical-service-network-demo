@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}" th:dir="${dir}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${ui.t(lang,'appName')}">سامانه شبکه ارتباطی بین افراد فنی</title>
+    <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main>
+    <section class="hero">
+        <div>
+            <p class="eyebrow">Kotlin + Spring Boot + Thymeleaf + HTMX</p>
+            <h1 th:text="${ui.t(lang,'appName')}">سامانه شبکه ارتباطی بین افراد فنی</h1>
+            <p th:if="${lang == 'fa'}">یک نمونه دانشگاهی برای جستجو، رزرو زمان، ثبت نظر و مدیریت درخواست های خدمات فنی.</p>
+            <p th:if="${lang == 'en'}">A university demo for finding specialists, booking service slots, reviewing work, and managing requests.</p>
+            <div class="hero-actions">
+                <a class="btn primary" th:href="@{/technicians}" th:text="${ui.t(lang,'search')}">جستجو</a>
+                <a class="btn ghost" th:href="@{/technician/dashboard}" th:text="${ui.t(lang,'dashboard')}">داشبورد</a>
+            </div>
+        </div>
+        <div class="hero-panel">
+            <strong th:text="${role}">CUSTOMER</strong>
+            <span th:if="${lang == 'fa'}">نقش فعلی برای نمایش سناریوهای تحلیل سیستم</span>
+            <span th:if="${lang == 'en'}">Current role for system-analysis demo scenarios</span>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-head">
+            <h2 th:if="${lang == 'fa'}">دسته بندی خدمات</h2>
+            <h2 th:if="${lang == 'en'}">Service categories</h2>
+        </div>
+        <div class="category-grid">
+            <a class="category-card" th:each="cat : ${categoriesFa}" th:href="@{/technicians(category=${cat})}">
+                <span th:text="${cat}">برق کاری</span>
+                <small th:if="${lang == 'fa'}">مشاهده متخصصان</small>
+                <small th:if="${lang == 'en'}">View specialists</small>
+            </a>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-head">
+            <h2 th:text="${ui.t(lang,'featured')}">متخصصان پیشنهادی</h2>
+        </div>
+        <div class="tech-grid">
+            <article class="tech-card" th:each="tech : ${featured}">
+                <div class="card-top">
+                    <div>
+                        <h3 th:text="${tech.displayName(lang)}">نام</h3>
+                        <p th:text="${tech.category(lang)} + ' • ' + ${tech.city(lang)}">دسته</p>
+                    </div>
+                    <span class="badge" th:if="${tech.verified}" th:text="${ui.t(lang,'verified')}">تایید شده</span>
+                </div>
+                <div class="rating"><span th:text="${T(ir.university.technicalservice.FormattersKt).stars(tech.ratingAverage)}">★★★★★</span> <b th:text="${#numbers.formatDecimal(tech.ratingAverage,1,1)}">4.8</b></div>
+                <p th:text="${tech.bio(lang)}">bio</p>
+                <a class="btn small" th:href="@{/technicians/{id}(id=${tech.id})}" th:text="${lang == 'fa' ? 'مشاهده پروفایل' : 'View profile'}">پروفایل</a>
+            </article>
+        </div>
+    </section>
+
+    <section id="admin-owner">
+        <div class="section-head">
+            <h2 th:text="${ui.t(lang,'adminOwner')}">مدیریت</h2>
+        </div>
+        <div class="info-grid">
+            <div class="info-card"><h3>Admin</h3><p>مدیریت کاربران و متخصصان، تایید مدارک، رسیدگی به گزارش ها.</p></div>
+            <div class="info-card"><h3>Owner</h3><p>مشاهده تحلیل ها، برنامه توسعه شهری، و مدل درآمدی سامانه.</p></div>
+            <div class="info-card"><h3>System Design</h3><p>نمایش نقش ها، جریان درخواست، بازخورد، تقویم و داشبورد عملیاتی.</p></div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

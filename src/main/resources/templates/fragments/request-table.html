@@ -1,0 +1,29 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="requestTable" class="table-wrap">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th><th th:text="${lang == 'fa' ? 'مشتری' : 'Customer'}">مشتری</th><th th:text="${lang == 'fa' ? 'عنوان' : 'Title'}">عنوان</th><th th:text="${lang == 'fa' ? 'زمان' : 'Time'}">زمان</th><th>Status</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${requests.isEmpty()}"><td colspan="6" th:text="${lang == 'fa' ? 'هنوز درخواستی ثبت نشده است.' : 'No requests yet.'}">empty</td></tr>
+        <tr th:each="req : ${requests}">
+            <td th:text="${req.id}">ID</td>
+            <td th:text="${req.customerName}">customer</td>
+            <td th:text="${req.title}">title</td>
+            <td th:text="${T(ir.university.technicalservice.FormattersKt).ui(req.slotStart)}">time</td>
+            <td><span class="badge" th:text="${req.status}">status</span></td>
+            <td class="actions">
+                <form th:hx-post="@{/requests/{id}/status(id=${req.id})}" hx-target="#request-table" hx-swap="outerHTML">
+                    <input type="hidden" name="status" value="ACCEPTED">
+                    <button class="btn tiny" type="submit" th:text="${lang == 'fa' ? 'قبول' : 'Accept'}">Accept</button>
+                </form>
+                <form th:hx-post="@{/requests/{id}/status(id=${req.id})}" hx-target="#request-table" hx-swap="outerHTML">
+                    <input type="hidden" name="status" value="REJECTED">
+                    <button class="btn tiny ghost" type="submit" th:text="${lang == 'fa' ? 'رد' : 'Reject'}">Reject</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
