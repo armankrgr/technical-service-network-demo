@@ -68,7 +68,7 @@ class DemoDataRepo {
     fun allRequests() = requests.values.sortedByDescending { it.slotStart }
     fun findRequest(id: String) = requests[id]
 
-    fun citiesFa() = technicians.map { it.cityFa }.distinct().sorted()
+    fun cities(lang: String) = technicians.map { if (lang == "en") it.cityEn else it.cityFa }.distinct().sorted()
 
     fun categoryCounts(): Map<String, Int> = categories.associate { category ->
         category.fa to technicians.count { it.categoryFa == category.fa }

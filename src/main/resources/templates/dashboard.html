@@ -21,38 +21,40 @@
         <a class="btn ghost" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'رزرو نمونه جدید' : 'Create a demo booking'}">رزرو نمونه</a>
     </section>
 
-    <section class="stats-grid compact-stats dashboard-stats">
-        <div class="stat-card"><b th:text="${totalRequests}">0</b><span th:text="${lang == 'fa' ? 'کل درخواست ها' : 'total requests'}">کل درخواست ها</span></div>
-        <div class="stat-card"><b th:text="${submittedCount}">0</b><span th:text="${lang == 'fa' ? 'در انتظار بررسی' : 'pending'}">در انتظار</span></div>
-        <div class="stat-card"><b th:text="${acceptedCount}">0</b><span th:text="${lang == 'fa' ? 'قبول شده' : 'accepted'}">قبول شده</span></div>
-        <div class="stat-card"><b th:text="${rejectedCount}">0</b><span th:text="${lang == 'fa' ? 'رد شده' : 'rejected'}">رد شده</span></div>
-    </section>
+    <div id="dashboard-live" th:fragment="dashboardLive">
+        <section class="stats-grid compact-stats dashboard-stats">
+            <div class="stat-card"><b th:text="${totalRequests}">0</b><span th:text="${lang == 'fa' ? 'کل درخواست ها' : 'total requests'}">کل درخواست ها</span></div>
+            <div class="stat-card"><b th:text="${submittedCount}">0</b><span th:text="${lang == 'fa' ? 'در انتظار بررسی' : 'pending'}">در انتظار</span></div>
+            <div class="stat-card"><b th:text="${acceptedCount}">0</b><span th:text="${lang == 'fa' ? 'قبول شده' : 'accepted'}">قبول شده</span></div>
+            <div class="stat-card"><b th:text="${rejectedCount}">0</b><span th:text="${lang == 'fa' ? 'رد شده' : 'rejected'}">رد شده</span></div>
+        </section>
 
-    <section class="dashboard-grid">
-        <div>
-            <div class="section-head">
-                <div>
-                    <h2 th:text="${lang == 'fa' ? 'درخواست های خدمت' : 'Service Requests'}">درخواست ها</h2>
-                    <p class="muted" th:text="${lang == 'fa' ? 'اقدام ها با HTMX در همان صفحه به روز می شوند.' : 'Actions update in place with HTMX.'}">HTMX</p>
+        <section class="dashboard-grid">
+            <div>
+                <div class="section-head">
+                    <div>
+                        <h2 th:text="${lang == 'fa' ? 'درخواست های خدمت' : 'Service Requests'}">درخواست ها</h2>
+                        <p class="muted" th:text="${lang == 'fa' ? 'اقدام ها با HTMX در همان صفحه به روز می شوند.' : 'Actions update in place with HTMX.'}">HTMX</p>
+                    </div>
                 </div>
+                <div id="request-table" th:replace="~{fragments/request-table :: requestTable}"></div>
             </div>
-            <div id="request-table" th:replace="~{fragments/request-table :: requestTable}"></div>
-        </div>
-        <aside class="panel timeline-panel">
-            <div class="panel-head">
-                <div>
-                    <h2 th:text="${lang == 'fa' ? 'جریان وضعیت' : 'Status Flow'}">جریان وضعیت</h2>
-                    <p th:text="${lang == 'fa' ? 'نمایش ساده چرخه درخواست در دمو' : 'Simple request lifecycle for the demo'}">timeline</p>
+            <aside class="panel timeline-panel">
+                <div class="panel-head">
+                    <div>
+                        <h2 th:text="${lang == 'fa' ? 'جریان وضعیت' : 'Status Flow'}">جریان وضعیت</h2>
+                        <p th:text="${lang == 'fa' ? 'نمایش ساده چرخه درخواست در دمو' : 'Simple request lifecycle for the demo'}">timeline</p>
+                    </div>
                 </div>
-            </div>
-            <ol class="demo-timeline">
-                <li><b th:text="${lang == 'fa' ? 'ثبت درخواست' : 'Submitted'}">ثبت درخواست</b><span th:text="${lang == 'fa' ? 'کاربر زمان و توضیح مکان را ثبت می کند.' : 'Customer chooses a slot and location note.'}">step</span></li>
-                <li><b th:text="${lang == 'fa' ? 'بررسی متخصص' : 'Specialist review'}">بررسی</b><span th:text="${lang == 'fa' ? 'متخصص درخواست را قبول یا رد می کند.' : 'Specialist accepts or rejects the request.'}">step</span></li>
-                <li><b th:text="${lang == 'fa' ? 'تقویم و پیگیری' : 'Calendar and tracking'}">تقویم</b><span th:text="${lang == 'fa' ? 'فایل تقویم و وضعیت در داشبورد قابل مشاهده است.' : 'Calendar file and status stay visible.'}">step</span></li>
-                <li><b th:text="${lang == 'fa' ? 'ثبت بازخورد' : 'Review'}">بازخورد</b><span th:text="${lang == 'fa' ? 'بعد از انجام کار، نظر مشتری به پروفایل اضافه می شود.' : 'After the job, customer feedback updates the profile.'}">step</span></li>
-            </ol>
-        </aside>
-    </section>
+                <ol class="demo-timeline">
+                    <li><b th:text="${lang == 'fa' ? 'ثبت درخواست' : 'Submitted'}">ثبت درخواست</b><span th:text="${lang == 'fa' ? 'کاربر زمان و توضیح مکان را ثبت می کند.' : 'Customer chooses a slot and location note.'}">step</span></li>
+                    <li><b th:text="${lang == 'fa' ? 'بررسی متخصص' : 'Specialist review'}">بررسی</b><span th:text="${lang == 'fa' ? 'متخصص درخواست را قبول یا رد می کند.' : 'Specialist accepts or rejects the request.'}">step</span></li>
+                    <li><b th:text="${lang == 'fa' ? 'تقویم و پیگیری' : 'Calendar and tracking'}">تقویم</b><span th:text="${lang == 'fa' ? 'فایل تقویم و وضعیت در داشبورد قابل مشاهده است.' : 'Calendar file and status stay visible.'}">step</span></li>
+                    <li><b th:text="${lang == 'fa' ? 'ثبت بازخورد' : 'Review'}">بازخورد</b><span th:text="${lang == 'fa' ? 'بعد از انجام کار، نظر مشتری به پروفایل اضافه می شود.' : 'After the job, customer feedback updates the profile.'}">step</span></li>
+                </ol>
+            </aside>
+        </section>
+    </div>
 </main>
 </body>
 </html>

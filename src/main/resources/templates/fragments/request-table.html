@@ -29,11 +29,11 @@
             </ol>
 
             <div class="actions request-actions">
-                <form th:hx-post="@{/requests/{id}/status(id=${req.id})}" hx-target="#request-table" hx-swap="outerHTML">
+                <form th:hx-post="@{/requests/{id}/status(id=${req.id})}" hx-target="#dashboard-live" hx-swap="outerHTML">
                     <input type="hidden" name="status" value="ACCEPTED">
                     <button class="btn tiny" type="submit" th:text="${lang == 'fa' ? 'قبول درخواست' : 'Accept'}">Accept</button>
                 </form>
-                <form th:hx-post="@{/requests/{id}/status(id=${req.id})}" hx-target="#request-table" hx-swap="outerHTML">
+                <form th:hx-post="@{/requests/{id}/status(id=${req.id})}" hx-target="#dashboard-live" hx-swap="outerHTML">
                     <input type="hidden" name="status" value="REJECTED">
                     <button class="btn tiny ghost" type="submit" th:text="${lang == 'fa' ? 'رد درخواست' : 'Reject'}">Reject</button>
                 </form>

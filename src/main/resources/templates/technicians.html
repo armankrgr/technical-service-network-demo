@@ -41,7 +41,7 @@
                 <span th:text="${lang == 'fa' ? 'شهر' : 'City'}">شهر</span>
                 <select name="city">
                     <option value="" th:text="${lang == 'fa' ? 'همه شهرها' : 'All cities'}">همه</option>
-                    <option th:each="city : ${citiesFa}" th:value="${city}" th:text="${city}" th:selected="${criteria.city == city}">city</option>
+                    <option th:each="city : ${cities}" th:value="${city}" th:text="${city}" th:selected="${criteria.city == city}">city</option>
                 </select>
             </label>
             <label class="field">

@@ -63,5 +63,13 @@ class WebControllerSmokeTests(@Autowired private val mockMvc: MockMvc) {
                 content { string(containsString("BEGIN:VCALENDAR")) }
                 content { string(containsString("SUMMARY:Calendar test")) }
             }
+
+        mockMvc.post("/requests/$requestId/status") {
+            param("status", "ACCEPTED")
+        }.andExpect {
+            status { isOk() }
+            content { string(containsString("dashboard-live")) }
+            content { string(containsString("قبول شده")) }
+        }
     }
 }
