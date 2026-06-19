@@ -1,0 +1,99 @@
+[
+  {
+    "section": "home",
+    "title_fa": "صفحه اصلی",
+    "route": "/",
+    "screenshots": [
+      "screenshots/home-hero.png",
+      "screenshots/home-categories.png"
+    ],
+    "description_fa": "صفحه اصلی سامانه، هدف محصول، جستجوی اولیه، دکمه‌های اصلی، تغییر نقش و زبان، آمار شبکه و دسته‌بندی‌های خدمات فنی را نمایش می‌دهد.",
+    "word_caption_fa": "نمای کلی صفحه اصلی و معرفی سامانه شبکه ارتباطی بین افراد فنی"
+  },
+  {
+    "section": "search",
+    "title_fa": "جستجو و فیلتر متخصصان",
+    "route": "/technicians",
+    "screenshots": [
+      "screenshots/search-filters.png",
+      "screenshots/search-results.png"
+    ],
+    "description_fa": "کاربر می‌تواند متخصصان را بر اساس نام، مهارت، شهر، دسته خدمت، امتیاز، زمان آزاد و ترتیب نمایش فیلتر کند و کارت‌های نتیجه را مقایسه کند.",
+    "word_caption_fa": "جستجو، فیلتر و مقایسه متخصصان فنی"
+  },
+  {
+    "section": "profile",
+    "title_fa": "پروفایل متخصص",
+    "route": "/technicians/1",
+    "screenshots": [
+      "screenshots/profile-overview.png",
+      "screenshots/profile-booking.png"
+    ],
+    "description_fa": "پروفایل متخصص اطلاعاتی مانند نام، دسته خدمت، شهر، وضعیت تایید، امتیاز، مهارت‌ها، هزینه شروع و زمان‌های آزاد را نمایش می‌دهد.",
+    "word_caption_fa": "پروفایل متخصص و پنل رزرو خدمت"
+  },
+  {
+    "section": "booking",
+    "title_fa": "ثبت درخواست و خروجی تقویم",
+    "route": "/technicians/1",
+    "screenshots": [
+      "screenshots/booking-success.png"
+    ],
+    "description_fa": "پس از انتخاب زمان آزاد، درخواست خدمت ثبت می‌شود و سامانه کد درخواست، وضعیت، لینک فایل تقویم و لینک Google Calendar را نمایش می‌دهد.",
+    "word_caption_fa": "ثبت موفق درخواست خدمت و تولید خروجی تقویم"
+  },
+  {
+    "section": "reviews",
+    "title_fa": "ثبت نظر و امتیاز",
+    "route": "/technicians/1",
+    "screenshots": [
+      "screenshots/reviews-rating.png"
+    ],
+    "description_fa": "کاربر می‌تواند پس از مشاهده پروفایل یا ثبت درخواست، امتیاز ستاره‌ای و نظر متنی خود را ثبت کند و خلاصه امتیازها در همان بخش نمایش داده می‌شود.",
+    "word_caption_fa": "بخش امتیازدهی و نظرهای کاربران"
+  },
+  {
+    "section": "technician-dashboard",
+    "title_fa": "داشبورد متخصص",
+    "route": "/technician/dashboard",
+    "screenshots": [
+      "screenshots/technician-dashboard.png",
+      "screenshots/dashboard-status-update.png"
+    ],
+    "description_fa": "متخصص درخواست‌های ثبت‌شده را می‌بیند، وضعیت هر درخواست را بررسی می‌کند و می‌تواند درخواست را قبول یا رد کند.",
+    "word_caption_fa": "مدیریت وضعیت درخواست‌ها توسط متخصص"
+  },
+  {
+    "section": "technician-onboarding",
+    "title_fa": "تکمیل پروفایل متخصص",
+    "route": "/technician/onboarding",
+    "screenshots": [
+      "screenshots/technician-onboarding-step1.png",
+      "screenshots/technician-onboarding-documents.png",
+      "screenshots/technician-onboarding-final.png"
+    ],
+    "description_fa": "متخصص اطلاعات اولیه، مهارت‌ها، محدوده فعالیت، مدارک و تایید شماره تماس را وارد می‌کند و پروفایل برای بررسی مدیر سیستم ارسال می‌شود.",
+    "word_caption_fa": "جریان onboarding متخصص و ارسال برای بررسی مدیر سیستم"
+  },
+  {
+    "section": "admin-owner",
+    "title_fa": "مدیریت و مالک سیستم",
+    "route": "/#admin-owner",
+    "screenshots": [
+      "screenshots/admin-owner.png"
+    ],
+    "description_fa": "بخش مدیریت و مالک سیستم شاخص‌هایی مانند متخصصان در انتظار بررسی، مدارک، گزارش‌های تخلف، دسته‌های فعال، شهرهای فعال و کیفیت پاسخگویی را نشان می‌دهد.",
+    "word_caption_fa": "شاخص‌های مدیریتی برای کنترل کیفیت و رشد شبکه خدمات"
+  },
+  {
+    "section": "mobile",
+    "title_fa": "نمای واکنش‌گرا",
+    "route": "/ و /technician/onboarding",
+    "screenshots": [
+      "screenshots/mobile-home.png",
+      "screenshots/mobile-profile-or-onboarding.png"
+    ],
+    "description_fa": "نسخه موبایل نشان می‌دهد صفحه اصلی و مسیر تکمیل پروفایل متخصص در نمایشگر کوچک نیز قابل استفاده و خوانا هستند.",
+    "word_caption_fa": "نمای موبایل و رفتار واکنش‌گرای سامانه"
+  }
+]

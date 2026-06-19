@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" direction="rtl">
+  <defs>
+    <style>
+      .bg { fill: #f6f8fc; }
+      .title { font-family: Vazirmatn, Tahoma, sans-serif; font-size: 34px; font-weight: 900; fill: #0f172a; }
+      .role { font-family: Vazirmatn, Tahoma, sans-serif; font-size: 22px; font-weight: 900; fill: #1d4ed8; }
+      .box { fill: #ffffff; stroke: #dbe3ef; stroke-width: 2; rx: 18; }
+      .boxText { font-family: Vazirmatn, Tahoma, sans-serif; font-size: 18px; font-weight: 700; fill: #1f2937; }
+      .arrow { stroke: #64748b; stroke-width: 2.5; marker-end: url(#arrowHead); }
+      .lane { fill: #eef4ff; stroke: #d8e6ff; stroke-width: 1.5; rx: 24; }
+    </style>
+    <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1400" height="900" />
+  <text class="title" x="700" y="58" text-anchor="middle">خلاصه جریان‌های اصلی سامانه شبکه ارتباطی بین افراد فنی</text>
+
+  <g transform="translate(70 95)">
+    <rect class="lane" x="0" y="0" width="1260" height="170" />
+    <text class="role" x="1190" y="48" text-anchor="end">کاربر خدمات فنی</text>
+    <g transform="translate(60 78)">
+      <rect class="box" x="0" y="0" width="165" height="58" />
+      <text class="boxText" x="82" y="37" text-anchor="middle">انتخاب خدمت</text>
+      <line class="arrow" x1="172" y1="29" x2="230" y2="29" />
+      <rect class="box" x="240" y="0" width="180" height="58" />
+      <text class="boxText" x="330" y="37" text-anchor="middle">جستجوی متخصص</text>
+      <line class="arrow" x1="428" y1="29" x2="486" y2="29" />
+      <rect class="box" x="496" y="0" width="180" height="58" />
+      <text class="boxText" x="586" y="37" text-anchor="middle">مشاهده پروفایل</text>
+      <line class="arrow" x1="684" y1="29" x2="742" y2="29" />
+      <rect class="box" x="752" y="0" width="150" height="58" />
+      <text class="boxText" x="827" y="37" text-anchor="middle">رزرو زمان</text>
+      <line class="arrow" x1="910" y1="29" x2="968" y2="29" />
+      <rect class="box" x="978" y="0" width="180" height="58" />
+      <text class="boxText" x="1068" y="37" text-anchor="middle">ثبت امتیاز و نظر</text>
+    </g>
+  </g>
+
+  <g transform="translate(70 295)">
+    <rect class="lane" x="0" y="0" width="1260" height="170" />
+    <text class="role" x="1190" y="48" text-anchor="end">متخصص فنی</text>
+    <g transform="translate(80 78)">
+      <rect class="box" x="0" y="0" width="180" height="58" />
+      <text class="boxText" x="90" y="37" text-anchor="middle">تکمیل پروفایل</text>
+      <line class="arrow" x1="188" y1="29" x2="246" y2="29" />
+      <rect class="box" x="256" y="0" width="160" height="58" />
+      <text class="boxText" x="336" y="37" text-anchor="middle">ارسال مدارک</text>
+      <line class="arrow" x1="424" y1="29" x2="482" y2="29" />
+      <rect class="box" x="492" y="0" width="160" height="58" />
+      <text class="boxText" x="572" y="37" text-anchor="middle">تایید مدیر</text>
+      <line class="arrow" x1="660" y1="29" x2="718" y2="29" />
+      <rect class="box" x="728" y="0" width="190" height="58" />
+      <text class="boxText" x="823" y="37" text-anchor="middle">دریافت درخواست</text>
+      <line class="arrow" x1="926" y1="29" x2="984" y2="29" />
+      <rect class="box" x="994" y="0" width="170" height="58" />
+      <text class="boxText" x="1079" y="37" text-anchor="middle">پذیرش یا رد</text>
+    </g>
+  </g>
+
+  <g transform="translate(70 495)">
+    <rect class="lane" x="0" y="0" width="1260" height="150" />
+    <text class="role" x="1190" y="45" text-anchor="end">مدیر سیستم</text>
+    <g transform="translate(190 75)">
+      <rect class="box" x="0" y="0" width="200" height="58" />
+      <text class="boxText" x="100" y="37" text-anchor="middle">تایید مدارک</text>
+      <line class="arrow" x1="208" y1="29" x2="286" y2="29" />
+      <rect class="box" x="296" y="0" width="230" height="58" />
+      <text class="boxText" x="411" y="37" text-anchor="middle">رسیدگی به گزارش‌ها</text>
+      <line class="arrow" x1="534" y1="29" x2="612" y2="29" />
+      <rect class="box" x="622" y="0" width="260" height="58" />
+      <text class="boxText" x="752" y="37" text-anchor="middle">مدیریت دسته‌بندی خدمات</text>
+    </g>
+  </g>
+
+  <g transform="translate(70 675)">
+    <rect class="lane" x="0" y="0" width="1260" height="150" />
+    <text class="role" x="1190" y="45" text-anchor="end">مالک سیستم</text>
+    <g transform="translate(210 75)">
+      <rect class="box" x="0" y="0" width="210" height="58" />
+      <text class="boxText" x="105" y="37" text-anchor="middle">گزارش‌های تحلیلی</text>
+      <line class="arrow" x1="218" y1="29" x2="296" y2="29" />
+      <rect class="box" x="306" y="0" width="190" height="58" />
+      <text class="boxText" x="401" y="37" text-anchor="middle">توسعه شهرها</text>
+      <line class="arrow" x1="504" y1="29" x2="582" y2="29" />
+      <rect class="box" x="592" y="0" width="190" height="58" />
+      <text class="boxText" x="687" y="37" text-anchor="middle">مدل درآمدی</text>
+    </g>
+  </g>
+</svg>
