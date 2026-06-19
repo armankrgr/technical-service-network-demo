@@ -42,6 +42,21 @@ class WebControllerSmokeTests(@Autowired private val mockMvc: MockMvc) {
     }
 
     @Test
+    fun `technician onboarding page returns 200`() {
+        mockMvc.get("/technician/onboarding")
+            .andExpect {
+                status { isOk() }
+                content { string(containsString("onboarding-flow")) }
+            }
+
+        mockMvc.post("/technician/onboarding/submit")
+            .andExpect {
+                status { isOk() }
+                content { string(containsString("onboarding-submit-success")) }
+            }
+    }
+
+    @Test
     fun `calendar route works after booking`() {
         val booking = mockMvc.post("/technicians/1/book") {
             param("customerName", "Demo Student")

@@ -18,7 +18,7 @@
             <p th:if="${lang == 'fa'}">متخصص می تواند درخواست های ثبت شده، وضعیت هر درخواست و اقدام بعدی را سریع بررسی کند.</p>
             <p th:if="${lang == 'en'}">Specialists can review submitted requests, each status, and the next action quickly.</p>
         </div>
-        <a class="btn ghost" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'رزرو نمونه جدید' : 'Create a demo booking'}">رزرو نمونه</a>
+        <a class="btn ghost" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'مشاهده درخواست جدید' : 'Find new requests'}">مشاهده درخواست جدید</a>
     </section>
 
     <div id="dashboard-live" th:fragment="dashboardLive">
@@ -43,10 +43,10 @@
                 <div class="panel-head">
                     <div>
                         <h2 th:text="${lang == 'fa' ? 'جریان وضعیت' : 'Status Flow'}">جریان وضعیت</h2>
-                        <p th:text="${lang == 'fa' ? 'نمایش ساده چرخه درخواست در دمو' : 'Simple request lifecycle for the demo'}">timeline</p>
+                        <p th:text="${lang == 'fa' ? 'مسیر هر درخواست از ثبت تا بازخورد قابل پیگیری است.' : 'Each request stays trackable from submission to review.'}">timeline</p>
                     </div>
                 </div>
-                <ol class="demo-timeline">
+                <ol class="status-timeline">
                     <li><b th:text="${lang == 'fa' ? 'ثبت درخواست' : 'Submitted'}">ثبت درخواست</b><span th:text="${lang == 'fa' ? 'کاربر زمان و توضیح مکان را ثبت می کند.' : 'Customer chooses a slot and location note.'}">step</span></li>
                     <li><b th:text="${lang == 'fa' ? 'بررسی متخصص' : 'Specialist review'}">بررسی</b><span th:text="${lang == 'fa' ? 'متخصص درخواست را قبول یا رد می کند.' : 'Specialist accepts or rejects the request.'}">step</span></li>
                     <li><b th:text="${lang == 'fa' ? 'تقویم و پیگیری' : 'Calendar and tracking'}">تقویم</b><span th:text="${lang == 'fa' ? 'فایل تقویم و وضعیت در داشبورد قابل مشاهده است.' : 'Calendar file and status stay visible.'}">step</span></li>

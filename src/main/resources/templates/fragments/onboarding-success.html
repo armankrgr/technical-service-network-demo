@@ -1,0 +1,14 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     th:fragment="onboardingSuccess"
+     id="onboarding-result"
+     class="onboarding-result onboarding-submit-success"
+     data-toast
+     th:attr="data-toast-message=${lang == 'fa' ? 'پروفایل برای بررسی ارسال شد' : 'Profile sent for review'}">
+    <div class="success-card compact-success">
+        <div class="success-icon">✓</div>
+        <div>
+            <h3 th:text="${lang == 'fa' ? 'پروفایل برای بررسی ارسال شد' : 'Profile sent for review'}">پروفایل برای بررسی ارسال شد</h3>
+            <p th:text="${lang == 'fa' ? 'مدیر سیستم مدارک و اطلاعات شما را بررسی می کند. پس از تأیید، پروفایل در نتایج جستجو نمایش داده می شود.' : 'The system admin will review your documents and profile. After approval, your profile can appear in search results.'}">مدیر سیستم بررسی می کند.</p>
+        </div>
+    </div>
+</div>

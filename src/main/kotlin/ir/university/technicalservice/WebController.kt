@@ -99,6 +99,16 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
         return "dashboard"
     }
 
+    @GetMapping("/technician/onboarding")
+    fun technicianOnboarding(model: Model): String {
+        model.addAttribute("categories", repo.categories)
+        model.addAttribute("cities", repo.cities(currentLang(model)))
+        return "technician-onboarding"
+    }
+
+    @PostMapping("/technician/onboarding/submit")
+    fun submitTechnicianOnboarding(): String = "fragments/onboarding-success :: onboardingSuccess"
+
     @PostMapping("/requests/{id}/status")
     fun status(@PathVariable id: String, @RequestParam status: RequestStatus, model: Model): String {
         repo.updateRequestStatus(id, status)

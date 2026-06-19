@@ -8,5 +8,7 @@ Fresh screenshot captures for the premium UI refresh:
 - `booking-success.png`
 - `dashboard.png`
 - `admin-owner.png`
+- `technician-onboarding.png`
 - `mobile-home.png`
 - `mobile-profile.png`
+- `mobile-onboarding.png`

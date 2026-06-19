@@ -1,6 +1,6 @@
 # Technical Service Network Demo
 
-University demo project for **سامانه شبکه ارتباطی بین افراد فنی**. The app demonstrates a lightweight technical-service marketplace where customers discover specialists, filter profiles, reserve an available slot, export a calendar event, leave reviews, and track requests from a technician dashboard.
+University demo project for **سامانه شبکه ارتباطی بین افراد فنی**. The app demonstrates a lightweight technical-service marketplace where customers discover specialists, filter profiles, reserve an available slot, export a calendar event, leave reviews, track requests from a technician dashboard, and walk through a technician onboarding flow.
 
 GitHub repository: <https://github.com/armankrgr/technical-service-network-demo>
 
@@ -41,6 +41,7 @@ $env:GRADLE_USER_HOME='E:\Project.gradle-cache'
 - Persian-first RTL UI with English LTR mode.
 - Session-based role switch for Customer, Technician, Admin, and Owner.
 - Premium marketplace home page with search, quick category chips, trust badges, stats, service visual, process section, trust/safety section, and Admin/Owner preview.
+- Technician onboarding page with multi-step profile setup, skill/service-area entry, visual document-upload placeholders, phone verification mockup, and HTMX success feedback.
 - 18 service categories, including smart-home equipment, boiler repair, and light welding.
 - 36 sample technicians across multiple cities with varied verification, prices, response times, ratings, jobs, slots, skills, and reviews.
 - Live search page with active filters, category chips, city/rating/availability/sort controls, HTMX-style loading state, empty state, and reset action.
@@ -66,13 +67,14 @@ The color system moved away from the old green-heavy theme toward deep ink, soft
 2. Show the hero search, quick chips, trust badges, marketplace visual, and stats.
 3. Switch FA / EN to demonstrate RTL and LTR behavior.
 4. Use the role selector to explain Customer, Technician, Admin, and Owner actors.
-5. Open `/technicians` and filter by category, city, rating, availability, and sort order.
-6. Open a specialist profile and compare rating, response time, price, reviews, and similar specialists.
-7. Select a slot, submit a booking, and show the success card plus request timeline.
-8. Verify the `.ics` link and Google Calendar link.
-9. Submit a review and show the updated reviews fragment.
-10. Open the technician dashboard and accept/reject the request.
-11. Return to the Admin/Owner section and connect the UI to the Systems Analysis story.
+5. Open `/technician/onboarding` and show the specialist registration path: profile details, skills, document placeholders, phone verification, and final review submission.
+6. Open `/technicians` and filter by category, city, rating, availability, and sort order.
+7. Open a specialist profile and compare rating, response time, price, reviews, and similar specialists.
+8. Select a slot, submit a booking, and show the success card plus request timeline.
+9. Verify the `.ics` link and Google Calendar link.
+10. Submit a review and show the updated reviews fragment.
+11. Open the technician dashboard and accept/reject the request.
+12. Return to the Admin/Owner section and connect the UI to onboarding review, network quality, and the Systems Analysis story.
 
 ## Routes
 
@@ -82,6 +84,8 @@ The color system moved away from the old green-heavy theme toward deep ink, soft
 - `/technicians/{id}`
 - `/technicians/{id}/book`
 - `/technicians/{id}/reviews`
+- `/technician/onboarding`
+- `/technician/onboarding/submit`
 - `/technician/dashboard`
 - `/requests/{id}/status`
 - `/calendar/{requestId}.ics`
@@ -94,13 +98,16 @@ The color system moved away from the old green-heavy theme toward deep ink, soft
 - `screenshots/booking-success.png`
 - `screenshots/dashboard.png`
 - `screenshots/admin-owner.png`
+- `screenshots/technician-onboarding.png`
 - `screenshots/mobile-home.png`
 - `screenshots/mobile-profile.png`
+- `screenshots/mobile-onboarding.png`
 
 ![Home](screenshots/home.png)
 ![Search](screenshots/search.png)
 ![Profile](screenshots/profile.png)
+![Technician onboarding](screenshots/technician-onboarding.png)
 
 ## Known Limitations
 
-This is an in-memory academic demo. It intentionally does not include production authentication, a database, payments, real GPS, SMS/email notifications, document upload, persistent storage, or real admin moderation tools. The goal is to demonstrate core Systems Analysis and Design workflows in a runnable, understandable, presentation-ready web app.
+This is an in-memory academic demo. It intentionally does not include production authentication, a database, payments, real GPS, real SMS/email notifications, actual document upload, persistent storage, or real admin moderation tools. The onboarding and verification flow is a front-end/HTMX walkthrough designed to show the product workflow clearly. The goal is to demonstrate core Systems Analysis and Design workflows in a runnable, understandable, presentation-ready web app.

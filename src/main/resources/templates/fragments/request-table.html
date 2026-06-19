@@ -1,7 +1,7 @@
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="requestTable" id="request-table" class="request-board-wrap">
     <div class="empty-state" th:if="${requests.isEmpty()}">
         <h3 th:text="${lang == 'fa' ? 'هنوز درخواستی ثبت نشده است' : 'No requests yet'}">empty</h3>
-        <p th:text="${lang == 'fa' ? 'برای نمایش سناریوی داشبورد، از صفحه یک متخصص یک رزرو نمونه ثبت کنید.' : 'Create a demo booking from a specialist profile to populate this board.'}">empty</p>
+        <p th:text="${lang == 'fa' ? 'پس از ثبت درخواست توسط کاربر، جزئیات آن در این بخش نمایش داده می شود.' : 'After a customer submits a request, its details appear here.'}">empty</p>
         <a class="btn small" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'رفتن به جستجو' : 'Go to search'}">search</a>
     </div>
 

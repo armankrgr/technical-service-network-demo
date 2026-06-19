@@ -16,6 +16,7 @@
         <a th:href="@{/}" th:text="${ui.t(lang,'home')}">خانه</a>
         <a th:href="@{/technicians}" th:text="${ui.t(lang,'technicians')}">متخصصان</a>
         <a th:href="@{/technician/dashboard}" th:text="${ui.t(lang,'dashboard')}">داشبورد</a>
+        <a th:href="@{/technician/onboarding}" th:classappend="${role == 'TECHNICIAN'} ? ' nav-highlight' : ''" th:text="${lang == 'fa' ? 'تکمیل پروفایل' : 'Complete profile'}">تکمیل پروفایل</a>
         <a th:href="@{/#admin-owner}" th:text="${ui.t(lang,'adminOwner')}">مدیریت</a>
     </div>
     <form class="nav-controls" method="get">

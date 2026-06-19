@@ -42,7 +42,7 @@
         <div class="slot-section">
             <div class="slot-section-head">
                 <strong th:text="${lang == 'fa' ? 'زمان های پیشنهادی' : 'Suggested slots'}">زمان های پیشنهادی</strong>
-                <small th:text="${lang == 'fa' ? 'زمان های رزرو شده برای نمایش سناریوی خطا غیرفعال هستند.' : 'Booked slots are disabled to show the unavailable flow.'}">راهنما</small>
+                <small th:text="${lang == 'fa' ? 'زمان های رزرو شده غیرفعال هستند و فقط زمان های آزاد قابل انتخاب اند.' : 'Booked slots are disabled; only open slots can be selected.'}">راهنما</small>
             </div>
             <div class="slot-grid">
                 <label class="slot-card" th:each="slot : ${tech.slots}" th:classappend="${slot.booked} ? ' unavailable' : ''">

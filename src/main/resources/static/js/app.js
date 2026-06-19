@@ -139,6 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSlotCards(root);
         updateStarPickers(root);
         animateCounts(root);
+        initOnboarding(root);
         root.querySelectorAll("[data-toast]").forEach(function (element) {
             if (element.dataset.toastShown === "true") return;
             element.dataset.toastShown = "true";
@@ -163,6 +164,80 @@ document.addEventListener("DOMContentLoaded", function () {
             const rect = bookingPanel.getBoundingClientRect();
             const visible = rect.top < window.innerHeight && rect.bottom > 0;
             cta.classList.toggle("is-visible", window.innerWidth <= 760 && !visible);
+        });
+    }
+
+    function initOnboarding(root) {
+        root.querySelectorAll("[data-onboarding]").forEach(function (shell) {
+            if (shell.dataset.onboardingReady === "true") return;
+            shell.dataset.onboardingReady = "true";
+            const isEnglish = document.documentElement.lang === "en";
+
+            const flow = shell.querySelector(".onboarding-flow");
+            const steps = Array.from(shell.querySelectorAll("[data-onboarding-step]"));
+            const triggers = Array.from(shell.querySelectorAll("[data-onboarding-step-trigger]"));
+            const nextButton = shell.querySelector("[data-onboarding-next]");
+            const prevButton = shell.querySelector("[data-onboarding-prev]");
+            const total = steps.length;
+            let current = 1;
+
+            function setStep(step) {
+                current = Math.max(1, Math.min(total, Number(step) || 1));
+                steps.forEach(function (section) {
+                    section.classList.toggle("active", Number(section.dataset.onboardingStep) === current);
+                });
+                triggers.forEach(function (button) {
+                    button.classList.toggle("active", Number(button.dataset.onboardingStepTrigger) === current);
+                });
+                if (flow) {
+                    flow.classList.toggle("is-first", current === 1);
+                    flow.classList.toggle("is-final", current === total);
+                }
+            }
+
+            triggers.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    setStep(button.dataset.onboardingStepTrigger);
+                });
+            });
+            if (nextButton) nextButton.addEventListener("click", function () { setStep(current + 1); });
+            if (prevButton) prevButton.addEventListener("click", function () { setStep(current - 1); });
+
+            shell.querySelectorAll("[data-upload-box] input[type='file']").forEach(function (input) {
+                input.addEventListener("change", function () {
+                    const box = input.closest("[data-upload-box]");
+                    const label = box ? box.querySelector("span") : null;
+                    if (!box || !label) return;
+                    box.classList.toggle("uploaded", input.files && input.files.length > 0);
+                    label.textContent = input.files && input.files.length > 0
+                        ? (isEnglish ? "Ready for review" : "آماده بررسی")
+                        : (isEnglish ? "No file selected" : "فایل انتخاب نشده");
+                });
+            });
+
+            shell.querySelectorAll("[data-send-code]").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const status = shell.querySelector("[data-phone-status]");
+                    if (status) {
+                        status.classList.remove("verified");
+                        status.textContent = isEnglish ? "Verification code sent" : "کد تأیید ارسال شد";
+                    }
+                    showToast(isEnglish ? "Verification code sent" : "کد تأیید نمونه ارسال شد");
+                });
+            });
+
+            shell.querySelectorAll("[data-confirm-phone]").forEach(function (button) {
+                button.addEventListener("click", function () {
+                    const status = shell.querySelector("[data-phone-status]");
+                    if (status) {
+                        status.classList.add("verified");
+                        status.textContent = isEnglish ? "Phone number verified" : "شماره تماس تأیید شد";
+                    }
+                    showToast(isEnglish ? "Phone number verified" : "شماره تماس تأیید شد");
+                });
+            });
+
+            setStep(1);
         });
     }
 

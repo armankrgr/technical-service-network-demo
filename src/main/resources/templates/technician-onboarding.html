@@ -1,0 +1,127 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${lang}" th:dir="${dir}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${lang == 'fa' ? 'تکمیل پروفایل متخصص' : 'Specialist onboarding'}">تکمیل پروفایل متخصص</title>
+    <script th:src="@{/js/htmx.min.js}"></script>
+    <script th:src="@{/js/app.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main>
+    <section class="page-head onboarding-head">
+        <div>
+            <p class="eyebrow" th:text="${lang == 'fa' ? 'شروع همکاری متخصص' : 'Specialist onboarding'}">شروع همکاری متخصص</p>
+            <h1 th:text="${lang == 'fa' ? 'پروفایل خود را تکمیل کنید و برای بررسی ارسال کنید' : 'Complete your profile and send it for review'}">پروفایل خود را تکمیل کنید و برای بررسی ارسال کنید</h1>
+            <p th:text="${lang == 'fa' ? 'اطلاعات پایه، مهارت ها، مدارک و شماره تماس شما بررسی می شود تا پس از تأیید مدیر سیستم در نتایج جستجو نمایش داده شوید.' : 'Your profile, skills, documents, and phone number are reviewed before your services appear in search results.'}">اطلاعات و مدارک بررسی می شود.</p>
+        </div>
+        <div class="onboarding-status-card">
+            <b th:text="${lang == 'fa' ? 'وضعیت پروفایل' : 'Profile status'}">وضعیت پروفایل</b>
+            <span th:text="${lang == 'fa' ? 'در حال تکمیل' : 'In progress'}">در حال تکمیل</span>
+        </div>
+    </section>
+
+    <section class="onboarding-shell" data-onboarding>
+        <aside class="onboarding-steps" aria-label="onboarding steps">
+            <button type="button" class="active" data-onboarding-step-trigger="1"><b>۱</b><span th:text="${lang == 'fa' ? 'اطلاعات اولیه' : 'Basic info'}">اطلاعات اولیه</span></button>
+            <button type="button" data-onboarding-step-trigger="2"><b>۲</b><span th:text="${lang == 'fa' ? 'مهارت ها' : 'Skills'}">مهارت ها</span></button>
+            <button type="button" data-onboarding-step-trigger="3"><b>۳</b><span th:text="${lang == 'fa' ? 'مدارک' : 'Documents'}">مدارک</span></button>
+            <button type="button" data-onboarding-step-trigger="4"><b>۴</b><span th:text="${lang == 'fa' ? 'تأیید تماس' : 'Phone verification'}">تأیید تماس</span></button>
+            <button type="button" data-onboarding-step-trigger="5"><b>۵</b><span th:text="${lang == 'fa' ? 'ارسال برای بررسی' : 'Submit'}">ارسال برای بررسی</span></button>
+        </aside>
+
+        <form class="onboarding-flow panel" hx-post="/technician/onboarding/submit" hx-target="#onboarding-result" hx-swap="outerHTML">
+            <section class="onboarding-step active" data-onboarding-step="1">
+                <div class="panel-head">
+                    <div>
+                        <h2 th:text="${lang == 'fa' ? 'اطلاعات اولیه' : 'Basic information'}">اطلاعات اولیه</h2>
+                        <p th:text="${lang == 'fa' ? 'اطلاعاتی که در کارت و پروفایل شما دیده می شود.' : 'Information shown on your specialist profile.'}">اطلاعات پروفایل.</p>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <label class="field"><span th:text="${lang == 'fa' ? 'نام و نام خانوادگی' : 'Full name'}">نام و نام خانوادگی</span><input name="fullName" th:placeholder="${lang == 'fa' ? 'مثلا پیمان روشنی' : 'Example: Peyman Roshani'}"></label>
+                    <label class="field"><span th:text="${lang == 'fa' ? 'شماره تماس' : 'Phone number'}">شماره تماس</span><input name="phone" inputmode="tel" placeholder="0912 000 0000"></label>
+                    <label class="field"><span th:text="${lang == 'fa' ? 'شهر فعالیت' : 'City'}">شهر فعالیت</span><select name="city"><option th:each="city : ${cities}" th:value="${city}" th:text="${city}">تهران</option></select></label>
+                    <label class="field"><span th:text="${lang == 'fa' ? 'عنوان تخصصی' : 'Professional title'}">عنوان تخصصی</span><input name="title" th:placeholder="${lang == 'fa' ? 'نصاب خانه هوشمند' : 'Smart home installer'}"></label>
+                    <label class="field wide"><span th:text="${lang == 'fa' ? 'دسته خدمت اصلی' : 'Primary service category'}">دسته خدمت اصلی</span><select name="category"><option th:each="cat : ${categories}" th:value="${cat.key}" th:text="${cat.label(lang)}">برق کاری</option></select></label>
+                </div>
+            </section>
+
+            <section class="onboarding-step" data-onboarding-step="2">
+                <div class="panel-head">
+                    <div>
+                        <h2 th:text="${lang == 'fa' ? 'مهارت ها و محدوده فعالیت' : 'Skills and coverage'}">مهارت ها و محدوده فعالیت</h2>
+                        <p th:text="${lang == 'fa' ? 'کاربر با این اطلاعات بهتر شما را مقایسه می کند.' : 'Customers use this information to compare specialists.'}">اطلاعات مقایسه.</p>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <label class="field wide"><span th:text="${lang == 'fa' ? 'مهارت ها / برچسب ها' : 'Skills / tags'}">مهارت ها / برچسب ها</span><input name="skills" th:placeholder="${lang == 'fa' ? 'کلید هوشمند، سنسور، عیب یابی' : 'Smart switches, sensors, diagnostics'}"></label>
+                    <label class="field wide"><span th:text="${lang == 'fa' ? 'شهرها یا مناطق تحت پوشش' : 'Coverage areas'}">شهرها یا مناطق تحت پوشش</span><input name="coverage" th:placeholder="${lang == 'fa' ? 'تهران، کرج، مناطق غرب' : 'Tehran, Karaj, west districts'}"></label>
+                    <label class="field"><span th:text="${lang == 'fa' ? 'تعرفه شروع' : 'Starting fee'}">تعرفه شروع</span><input name="fee" th:placeholder="${lang == 'fa' ? 'از ۶۵۰ هزار تومان' : 'from 650,000 toman'}"></label>
+                    <label class="field"><span th:text="${lang == 'fa' ? 'زمان پاسخگویی حدودی' : 'Response time'}">زمان پاسخگویی حدودی</span><input name="responseTime" th:placeholder="${lang == 'fa' ? 'کمتر از ۳ ساعت' : 'under 3 hours'}"></label>
+                </div>
+            </section>
+
+            <section class="onboarding-step" data-onboarding-step="3">
+                <div class="panel-head">
+                    <div>
+                        <h2 th:text="${lang == 'fa' ? 'بارگذاری مدارک' : 'Document upload'}">بارگذاری مدارک</h2>
+                        <p th:text="${lang == 'fa' ? 'مدارک پس از ارسال توسط مدیر سیستم بررسی می شوند.' : 'Documents are reviewed by system admins after submission.'}">مدارک بررسی می شوند.</p>
+                    </div>
+                </div>
+                <div class="upload-grid">
+                    <label class="upload-box" data-upload-box><input type="file"><b th:text="${lang == 'fa' ? 'تصویر کارت ملی' : 'National ID image'}">تصویر کارت ملی</b><span th:text="${lang == 'fa' ? 'فایل انتخاب نشده' : 'No file selected'}">فایل انتخاب نشده</span></label>
+                    <label class="upload-box" data-upload-box><input type="file"><b th:text="${lang == 'fa' ? 'مدرک یا گواهی مهارت' : 'Skill certificate'}">مدرک یا گواهی مهارت</b><span th:text="${lang == 'fa' ? 'فایل انتخاب نشده' : 'No file selected'}">فایل انتخاب نشده</span></label>
+                    <label class="upload-box" data-upload-box><input type="file"><b th:text="${lang == 'fa' ? 'نمونه کار یا تصویر پروژه قبلی' : 'Portfolio image'}">نمونه کار یا تصویر پروژه قبلی</b><span th:text="${lang == 'fa' ? 'فایل انتخاب نشده' : 'No file selected'}">فایل انتخاب نشده</span></label>
+                    <label class="field wide"><span th:text="${lang == 'fa' ? 'توضیح سابقه کاری' : 'Work experience'}">توضیح سابقه کاری</span><textarea name="experience" th:placeholder="${lang == 'fa' ? 'خلاصه تجربه، نوع پروژه ها و ابزارهای اصلی خود را بنویسید.' : 'Summarize your experience, projects, and main tools.'}"></textarea></label>
+                </div>
+            </section>
+
+            <section class="onboarding-step" data-onboarding-step="4">
+                <div class="panel-head">
+                    <div>
+                        <h2 th:text="${lang == 'fa' ? 'تأیید شماره تماس' : 'Phone verification'}">تأیید شماره تماس</h2>
+                        <p th:text="${lang == 'fa' ? 'تأیید شماره تماس کمک می کند درخواست ها قابل پیگیری باشند.' : 'Phone verification keeps service requests trackable.'}">شماره تماس تأیید می شود.</p>
+                    </div>
+                </div>
+                <div class="phone-verify-card" data-phone-verify>
+                    <label class="field"><span th:text="${lang == 'fa' ? 'شماره تماس' : 'Phone number'}">شماره تماس</span><input inputmode="tel" placeholder="0912 000 0000"></label>
+                    <label class="field"><span th:text="${lang == 'fa' ? 'کد تأیید نمونه' : 'Verification code'}">کد تأیید نمونه</span><input inputmode="numeric" placeholder="2468"></label>
+                    <div class="actions">
+                        <button class="btn ghost" type="button" data-send-code th:text="${lang == 'fa' ? 'ارسال کد' : 'Send code'}">ارسال کد</button>
+                        <button class="btn" type="button" data-confirm-phone th:text="${lang == 'fa' ? 'تأیید شماره' : 'Verify phone'}">تأیید شماره</button>
+                    </div>
+                    <p class="verify-status" data-phone-status th:text="${lang == 'fa' ? 'هنوز تأیید نشده' : 'Not verified yet'}">هنوز تأیید نشده</p>
+                </div>
+            </section>
+
+            <section class="onboarding-step" data-onboarding-step="5">
+                <div class="panel-head">
+                    <div>
+                        <h2 th:text="${lang == 'fa' ? 'ارسال برای بررسی' : 'Send for review'}">ارسال برای بررسی</h2>
+                        <p th:text="${lang == 'fa' ? 'پس از ارسال، وضعیت پروفایل شما در انتظار بررسی مدیر سیستم قرار می گیرد.' : 'After submission, your profile status becomes pending admin review.'}">در انتظار بررسی مدیر سیستم.</p>
+                    </div>
+                </div>
+                <div class="summary-grid">
+                    <span class="summary-item done" th:text="${lang == 'fa' ? 'اطلاعات پایه کامل شد' : 'Basic information completed'}">اطلاعات پایه کامل شد</span>
+                    <span class="summary-item done" th:text="${lang == 'fa' ? 'مهارت ها ثبت شد' : 'Skills added'}">مهارت ها ثبت شد</span>
+                    <span class="summary-item done" th:text="${lang == 'fa' ? 'مدارک آماده بررسی است' : 'Documents ready for review'}">مدارک آماده بررسی است</span>
+                    <span class="summary-item done" th:text="${lang == 'fa' ? 'شماره تماس تأیید شد' : 'Phone number verified'}">شماره تماس تأیید شد</span>
+                    <span class="summary-item pending" th:text="${lang == 'fa' ? 'وضعیت: در انتظار بررسی مدیر سیستم' : 'Status: pending admin review'}">وضعیت: در انتظار بررسی مدیر سیستم</span>
+                </div>
+                <div id="onboarding-result" class="onboarding-result"></div>
+            </section>
+
+            <div class="onboarding-actions">
+                <button class="btn ghost" type="button" data-onboarding-prev th:text="${lang == 'fa' ? 'مرحله قبل' : 'Previous'}">مرحله قبل</button>
+                <button class="btn" type="button" data-onboarding-next th:text="${lang == 'fa' ? 'مرحله بعد' : 'Next'}">مرحله بعد</button>
+                <button class="btn primary" type="submit" data-onboarding-submit th:text="${lang == 'fa' ? 'ارسال پروفایل برای بررسی' : 'Submit profile for review'}">ارسال پروفایل برای بررسی</button>
+                <a class="btn ghost" th:href="@{/technician/dashboard}" th:text="${lang == 'fa' ? 'رفتن به داشبورد متخصص' : 'Open specialist dashboard'}">رفتن به داشبورد متخصص</a>
+            </div>
+        </form>
+    </section>
+</main>
+</body>
+</html>
