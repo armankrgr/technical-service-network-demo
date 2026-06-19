@@ -9,9 +9,9 @@ class DemoDataRepoTests {
     fun `demo catalog has presentation scale`() {
         val repo = DemoDataRepo()
 
-        assertTrue(repo.categories.size >= 14)
-        assertTrue(repo.technicians.size >= 24)
-        assertEquals(24, repo.stats().technicianCount)
+        assertTrue(repo.categories.size >= 16)
+        assertTrue(repo.technicians.size >= 30)
+        assertEquals(repo.technicians.size, repo.stats().technicianCount)
     }
 
     @Test

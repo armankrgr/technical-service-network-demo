@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const timers = new WeakMap();
     const lastParams = new WeakMap();
+    const topbar = document.querySelector(".topbar");
 
     function asElement(target) {
         return target && target.nodeType === 1 ? target : null;
@@ -74,12 +75,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function swap(target, html, swapMode) {
         if (!target) return;
+        const targetId = target.id;
         if ((swapMode || "").includes("outerHTML")) {
             target.outerHTML = html;
         } else {
             target.innerHTML = html;
         }
         initDynamic(document);
+        const swapped = targetId ? document.getElementById(targetId) : null;
+        if (swapped && swapped.querySelector(".success-card")) {
+            swapped.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
     }
 
     function refreshForm(form) {
@@ -140,6 +146,26 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function updateTopbar() {
+        if (topbar) topbar.classList.toggle("is-scrolled", window.scrollY > 12);
+    }
+
+    function initMobileBookingCta() {
+        const cta = document.querySelector("[data-mobile-booking-cta]");
+        const bookingPanel = document.getElementById("booking-panel");
+        if (!cta || !bookingPanel || !("IntersectionObserver" in window)) return;
+        const observer = new IntersectionObserver(function (entries) {
+            const visible = entries.some(function (entry) { return entry.isIntersecting; });
+            cta.classList.toggle("is-visible", !visible && window.innerWidth <= 760);
+        }, { threshold: 0.08 });
+        observer.observe(bookingPanel);
+        window.addEventListener("resize", function () {
+            const rect = bookingPanel.getBoundingClientRect();
+            const visible = rect.top < window.innerHeight && rect.bottom > 0;
+            cta.classList.toggle("is-visible", window.innerWidth <= 760 && !visible);
+        });
+    }
+
     document.addEventListener("click", function (event) {
         const element = asElement(event.target);
         if (!element) return;
@@ -151,6 +177,14 @@ document.addEventListener("DOMContentLoaded", function () {
             topbar.classList.toggle("nav-open", open);
             toggle.setAttribute("aria-expanded", String(open));
             return;
+        }
+
+        const navLink = element.closest(".nav-links a");
+        if (navLink) {
+            const currentTopbar = navLink.closest(".topbar");
+            const currentToggle = currentTopbar ? currentTopbar.querySelector("[data-nav-toggle]") : null;
+            if (currentTopbar) currentTopbar.classList.remove("nav-open");
+            if (currentToggle) currentToggle.setAttribute("aria-expanded", "false");
         }
 
         const slotInput = element.closest(".slot-card input");
@@ -201,6 +235,10 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         event.stopImmediatePropagation();
         if (form.dataset.submitting === "true") return;
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
         const target = targetFor(form);
         setSubmitState(form, true);
         setLoading(form, true);
@@ -245,5 +283,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }, 600);
 
+    window.addEventListener("scroll", updateTopbar, { passive: true });
+    updateTopbar();
     initDynamic(document);
+    initMobileBookingCta();
 });

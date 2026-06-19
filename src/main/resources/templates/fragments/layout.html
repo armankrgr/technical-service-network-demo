@@ -4,9 +4,14 @@
 <nav th:fragment="nav" class="topbar">
     <a class="brand" th:href="@{/}">
         <span class="brand-mark">TS</span>
-        <span th:text="${ui.t(lang,'appName')}">سامانه</span>
+        <span class="brand-copy">
+            <strong th:text="${ui.t(lang,'appName')}">سامانه</strong>
+            <small th:text="${lang == 'fa' ? 'بازار تخصصی خدمات فنی' : 'Technical service marketplace'}">بازار خدمات</small>
+        </span>
     </a>
-    <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" data-nav-toggle>☰</button>
+    <button class="nav-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" data-nav-toggle>
+        <span></span><span></span><span></span>
+    </button>
     <div id="primary-nav" class="nav-links">
         <a th:href="@{/}" th:text="${ui.t(lang,'home')}">خانه</a>
         <a th:href="@{/technicians}" th:text="${ui.t(lang,'technicians')}">متخصصان</a>
@@ -14,14 +19,19 @@
         <a th:href="@{/#admin-owner}" th:text="${ui.t(lang,'adminOwner')}">مدیریت</a>
     </div>
     <form class="nav-controls" method="get">
-        <select name="role" onchange="this.form.submit()" th:title="${ui.t(lang,'role')}">
-            <option th:value="CUSTOMER" th:selected="${role == 'CUSTOMER'}" th:text="${ui.t(lang,'customer')}">Customer</option>
-            <option th:value="TECHNICIAN" th:selected="${role == 'TECHNICIAN'}" th:text="${ui.t(lang,'technicianRole')}">Technician</option>
-            <option th:value="ADMIN" th:selected="${role == 'ADMIN'}" th:text="${ui.t(lang,'admin')}">Admin</option>
-            <option th:value="OWNER" th:selected="${role == 'OWNER'}" th:text="${ui.t(lang,'owner')}">Owner</option>
-        </select>
-        <button class="chip" name="lang" value="fa" th:classappend="${lang == 'fa'} ? ' active'">FA</button>
-        <button class="chip" name="lang" value="en" th:classappend="${lang == 'en'} ? ' active'">EN</button>
+        <label class="role-pill">
+            <span th:text="${ui.t(lang,'role')}">نقش</span>
+            <select name="role" onchange="this.form.submit()" th:title="${ui.t(lang,'role')}">
+                <option th:value="CUSTOMER" th:selected="${role == 'CUSTOMER'}" th:text="${ui.t(lang,'customer')}">Customer</option>
+                <option th:value="TECHNICIAN" th:selected="${role == 'TECHNICIAN'}" th:text="${ui.t(lang,'technicianRole')}">Technician</option>
+                <option th:value="ADMIN" th:selected="${role == 'ADMIN'}" th:text="${ui.t(lang,'admin')}">Admin</option>
+                <option th:value="OWNER" th:selected="${role == 'OWNER'}" th:text="${ui.t(lang,'owner')}">Owner</option>
+            </select>
+        </label>
+        <div class="language-switch" role="group" th:attr="aria-label=${lang == 'fa' ? 'انتخاب زبان' : 'Language'}">
+            <button class="chip" name="lang" value="fa" th:classappend="${lang == 'fa'} ? ' active'">FA</button>
+            <button class="chip" name="lang" value="en" th:classappend="${lang == 'en'} ? ' active'">EN</button>
+        </div>
     </form>
 </nav>
 </body>

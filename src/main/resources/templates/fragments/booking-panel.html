@@ -15,6 +15,12 @@
             <p><span th:text="${lang == 'fa' ? 'متخصص:' : 'Specialist:'}">متخصص:</span> <b th:text="${tech.displayName(lang)}">نام</b></p>
             <p><span th:text="${lang == 'fa' ? 'زمان:' : 'Time:'}">زمان:</span> <b th:text="${T(ir.university.technicalservice.FormattersKt).ui(request.slotStart)}">time</b></p>
             <p><span th:text="${lang == 'fa' ? 'وضعیت:' : 'Status:'}">وضعیت:</span> <b th:text="${T(ir.university.technicalservice.FormattersKt).statusLabel(request.status, lang)}">status</b></p>
+            <ol class="booking-status-flow" aria-label="booking status">
+                <li class="done" th:text="${lang == 'fa' ? 'ثبت شد' : 'Submitted'}">ثبت شد</li>
+                <li th:text="${lang == 'fa' ? 'در انتظار بررسی' : 'Pending review'}">در انتظار بررسی</li>
+                <li th:text="${lang == 'fa' ? 'پذیرفته شده' : 'Accepted'}">پذیرفته شده</li>
+                <li th:text="${lang == 'fa' ? 'انجام شده' : 'Completed'}">انجام شده</li>
+            </ol>
             <div class="calendar-actions">
                 <a class="btn small" th:href="@{/calendar/{id}.ics(id=${request.id})}" th:text="${lang == 'fa' ? 'دانلود فایل تقویم' : 'Download .ics'}">ics</a>
                 <a class="btn small ghost" th:href="${googleUrl}" target="_blank" rel="noopener" th:text="${lang == 'fa' ? 'افزودن به Google Calendar' : 'Add to Google Calendar'}">google</a>

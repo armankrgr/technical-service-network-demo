@@ -68,6 +68,14 @@
             </label>
             <a class="btn ghost reset-link" th:href="@{/technicians}" th:text="${lang == 'fa' ? 'حذف فیلترها' : 'Reset'}">حذف فیلترها</a>
         </form>
+        <div class="active-filters" th:if="${(criteria.q != null && criteria.q != '') || (criteria.category != null && criteria.category != '') || (criteria.city != null && criteria.city != '') || criteria.minRating != null || criteria.availableOnly}">
+            <span th:text="${lang == 'fa' ? 'فیلترهای فعال' : 'Active filters'}">فیلترهای فعال</span>
+            <b th:if="${criteria.q != null && criteria.q != ''}" th:text="${criteria.q}">query</b>
+            <b th:if="${criteria.category != null && criteria.category != ''}" th:text="${criteria.category}">category</b>
+            <b th:if="${criteria.city != null && criteria.city != ''}" th:text="${criteria.city}">city</b>
+            <b th:if="${criteria.minRating != null}"><span th:text="${criteria.minRating}">4</span>+</b>
+            <b th:if="${criteria.availableOnly}" th:text="${ui.t(lang,'available')}">فقط زمان دار</b>
+        </div>
         <div class="filter-chips">
             <a class="filter-chip" th:href="@{/technicians}" th:classappend="${criteria.category == null || criteria.category == ''} ? ' active' : ''" th:text="${lang == 'fa' ? 'همه خدمات' : 'All services'}">همه خدمات</a>
             <a class="filter-chip" th:each="cat : ${categories}" th:href="@{/technicians(category=${cat.key})}" th:classappend="${criteria.category == cat.key || criteria.category == cat.fa || criteria.category == cat.en} ? ' active' : ''">

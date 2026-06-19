@@ -39,10 +39,8 @@
                 <small><span th:text="${tech.reviewCount}">3</span> <span th:text="${lang == 'fa' ? 'نظر' : 'reviews'}">نظر</span></small>
             </div>
 
-            <p class="muted clamp" th:text="${tech.bio(lang)}">bio</p>
-
             <div class="tags">
-                <span th:each="skill, iter : ${tech.skills(lang)}" th:if="${iter.index < 4}" th:text="${skill}">skill</span>
+                <span th:each="skill, iter : ${tech.skills(lang)}" th:if="${iter.index < 3}" th:text="${skill}">skill</span>
             </div>
 
             <div class="card-metrics">

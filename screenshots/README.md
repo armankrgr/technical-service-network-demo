@@ -1,8 +1,6 @@
 # Screenshots
 
-This folder is reserved for demo screenshots.
-
-Recommended captures:
+Fresh screenshot captures for the premium UI refresh:
 
 - `home.png`
 - `search.png`
@@ -10,3 +8,5 @@ Recommended captures:
 - `booking-success.png`
 - `dashboard.png`
 - `admin-owner.png`
+- `mobile-home.png`
+- `mobile-profile.png`
