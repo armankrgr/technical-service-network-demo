@@ -68,7 +68,7 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
             model.addAttribute("request", request)
             model.addAttribute("googleUrl", googleCalendarUrl(request))
         }.onFailure { error ->
-            model.addAttribute("bookingError", error.message ?: "Booking failed")
+            model.addAttribute("bookingError", bookingError(error.message, currentLang(model)))
         }
         return "fragments/booking-panel :: bookingPanel"
     }
@@ -85,7 +85,7 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
             }.onSuccess {
                 model.addAttribute("reviewSaved", true)
             }.onFailure { error ->
-                model.addAttribute("reviewError", error.message ?: "Review failed")
+                model.addAttribute("reviewError", reviewError(error.message, currentLang(model)))
             }
         }
         model.addAttribute("tech", tech)
@@ -103,7 +103,7 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
     fun status(@PathVariable id: String, @RequestParam status: RequestStatus, model: Model): String {
         repo.updateRequestStatus(id, status)
         addRequestsModel(model)
-        return "fragments/request-table :: requestTable"
+        return "dashboard :: dashboardLive"
     }
 
     @GetMapping("/calendar/{requestId}.ics")
@@ -116,11 +116,12 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
 
     private fun searchModel(model: Model, criteria: SearchCriteria) {
         val results = repo.search(criteria)
+        val lang = currentLang(model)
         model.addAttribute("criteria", criteria)
         model.addAttribute("technicians", results)
         model.addAttribute("categories", repo.categories)
         model.addAttribute("categoryCounts", repo.categoryCounts())
-        model.addAttribute("citiesFa", repo.citiesFa())
+        model.addAttribute("cities", repo.cities(lang))
         model.addAttribute("totalTechnicians", repo.technicians.size)
     }
 
@@ -132,5 +133,20 @@ class WebController(private val repo: DemoDataRepo, private val ui: UiText) {
         model.addAttribute("acceptedCount", requests.count { it.status == RequestStatus.ACCEPTED })
         model.addAttribute("rejectedCount", requests.count { it.status == RequestStatus.REJECTED })
         model.addAttribute("todayCount", requests.count { it.slotStart.toLocalDate() == java.time.LocalDate.now() })
+    }
+
+    private fun currentLang(model: Model) = model.asMap()["lang"] as? String ?: "fa"
+
+    private fun bookingError(message: String?, lang: String): String = when (message) {
+        "Customer name is required" -> if (lang == "en") "Customer name is required." else "نام مشتری الزامی است."
+        "Request title is required" -> if (lang == "en") "Request title is required." else "عنوان درخواست الزامی است."
+        "Address or location note is required" -> if (lang == "en") "Address or location note is required." else "آدرس یا توضیح مکان الزامی است."
+        "Selected slot is no longer available" -> if (lang == "en") "Selected slot is no longer available." else "این زمان قبلا رزرو شده یا دیگر در دسترس نیست."
+        else -> if (lang == "en") "Booking was not saved." else "ثبت درخواست انجام نشد."
+    }
+
+    private fun reviewError(message: String?, lang: String): String = when (message) {
+        "Comment is required" -> if (lang == "en") "Comment is required." else "متن نظر الزامی است."
+        else -> if (lang == "en") "Review was not saved." else "ثبت نظر انجام نشد."
     }
 }
